@@ -1,0 +1,61 @@
+# Unity関連の標準的な無視設定
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# ローカルプロジェクト設定ファイル
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# バージョン管理不要なキャッシュファイル
+*.swp
+.DS_Store
+Thumbs.db
+*.bak
+*.old
+
+# 3Dモデル関連
+*.fbx       # 3Dモデルファイル
+*.obj       # 3Dモデルファイル
+*.dae       # Colladaファイル
+
+# テクスチャや画像
+*.tga       # 高解像度テクスチャ
+*.psd       # Photoshopファイル
+*.tiff      # 高解像度画像
+
+# 動画ファイル
+*.mp4
+*.mov
+*.avi
+
+# 音声ファイル
+*.wav
+*.flac
+
+# 特定のアセットテンプレートを除外
+Assets/TutorialInfo/
+
+# Visual Studio Code関連
+.vscode/
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# Rider IDE関連
+.idea/
+*.idea/*
+*.iml
