@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2435426379832150392}
   - component: {fileID: 2915508269714014759}
   - component: {fileID: 555285817000763301}
+  - component: {fileID: 1185024022590676615}
   m_Layer: 0
   m_Name: rock11
   m_TagString: Untagged
@@ -148,3 +149,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.5
+  col1: {fileID: 4851371785865167835, guid: c26128d9672f16e4e91de6d8f24892b8, type: 3}
+  col2: {fileID: 2652554859817833297, guid: c26128d9672f16e4e91de6d8f24892b8, type: 3}
+--- !u!65 &1185024022590676615
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048363067150369790}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.008941823, y: 0.008450597, z: 0.026893312}
+  m_Center: {x: 0.0012851742, y: -0.0000009821687, z: 0.00088763586}

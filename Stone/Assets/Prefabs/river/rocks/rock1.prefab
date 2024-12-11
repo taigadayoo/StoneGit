@@ -104,7 +104,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
@@ -149,6 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.5
+  col1: {fileID: 4851371785865167835}
+  col2: {fileID: 2652554859817833297}
 --- !u!65 &2652554859817833297
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -166,7 +168,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.008941823, y: 0.009869898, z: 0.025468176}
   m_Center: {x: 0.0012851852, y: 0.0007086723, z: 0.0000038678777}
