@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 72deae4d18418f94688abef8e8483df0, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: aed657681c6812845bb7736c343b5e9b, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -572,7 +572,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.2009548, y: 0.67315245, z: 0.6797316, w: -0.21082692}
   m_LocalPosition: {x: -0.125, y: -0.539, z: 10.473}
-  m_LocalScale: {x: 39.65021, y: 29.832445, z: 5.9299617}
+  m_LocalScale: {x: 27.59417, y: 20.761593, z: 4.126898}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 543450653541104175}

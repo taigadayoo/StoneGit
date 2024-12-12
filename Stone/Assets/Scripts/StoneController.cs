@@ -11,15 +11,30 @@ public class StoneController : MonoBehaviour
    public Collider col1;
    public Collider col2;
     GameManager gameManager;
+    public float velocityThreshold = 0.1f; // 速度の閾値
+    public float angularVelocityThreshold = 0.1f; // 回転速度の閾値
+    public float checkDelay = 0.5f; // チェック間隔（秒）
+
+    private bool isKinematicSet = false;
+
+    public enum StoneLevel
+    {
+        Nomal,
+        Easy
+    }
+
+    [SerializeField]
+    StoneLevel stoneLevel;
     void Start()
     {
-       
+      
         col1.enabled = false;
         col2.enabled = false;
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
         stoneSpawner = FindObjectOfType<StoneSpawner>();
         gameManager = FindObjectOfType<GameManager>();
+        
     }
 
     // Update is called once per frame
@@ -52,7 +67,32 @@ public class StoneController : MonoBehaviour
             gameManager.SpawnedStones.Add(this.gameObject);
             stoneSpawner.StartRespawn(true);
             this.enabled = false;
+           
+        }
+    }
+    private System.Collections.IEnumerator CheckMovement()
+    {
+        while (!isKinematicSet)
+        {
+            float currentVelocity = rb.velocity.magnitude;
+            float currentAngularVelocity = rb.angularVelocity.magnitude;
 
+            Debug.Log($"Velocity: {currentVelocity}, Angular Velocity: {currentAngularVelocity}");
+
+            if (currentVelocity < velocityThreshold && currentAngularVelocity < angularVelocityThreshold)
+            {
+                rb.isKinematic = true;
+                isKinematicSet = true;
+            }
+
+            yield return new WaitForSeconds(checkDelay);
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (stoneLevel == StoneLevel.Easy)
+        {
+            StartCoroutine(CheckMovement());
         }
     }
 }

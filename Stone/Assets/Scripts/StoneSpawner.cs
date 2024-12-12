@@ -25,7 +25,7 @@ public class StoneSpawner : MonoBehaviour
         highestY = GetHighestYValue(gameManager.SpawnedStones);
 
 
-        AlignTargetToHighestY(this.gameObject, highestY+0.1f);
+        AlignTargetToHighestY(this.gameObject, highestY+0.15f);
         // フラグが上がったときにランダムスポーン
         if (onSpawn)
         {
