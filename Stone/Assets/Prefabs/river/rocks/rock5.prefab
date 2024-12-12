@@ -149,6 +149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.5
+  rotationSensitivity: 1
+  rotationMultiplier: 10
   col1: {fileID: 4851371785865167835, guid: c26128d9672f16e4e91de6d8f24892b8, type: 3}
   col2: {fileID: 2652554859817833297, guid: c26128d9672f16e4e91de6d8f24892b8, type: 3}
   velocityThreshold: 1
@@ -174,5 +176,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.008941825, y: 0.025744485, z: 0.023686396}
-  m_Center: {x: 0.0012852108, y: -0.0009165814, z: 0.0012161478}
+  m_Size: {x: 0.008941825, y: 0.017069105, z: 0.021380283}
+  m_Center: {x: 0.0012852098, y: 0.00006975801, z: 0.0005770535}

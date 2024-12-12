@@ -5,6 +5,8 @@ using UnityEngine;
 public class StoneController : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public float rotationSensitivity = 1f;
+    public float rotationMultiplier = 100f; // 回転量を増加させる倍率
     // Start is called before the first frame update
     Rigidbody rb;
     StoneSpawner stoneSpawner;
@@ -69,6 +71,7 @@ public class StoneController : MonoBehaviour
             this.enabled = false;
            
         }
+        RotateWithMouse();
     }
     private System.Collections.IEnumerator CheckMovement()
     {
@@ -95,4 +98,19 @@ public class StoneController : MonoBehaviour
             StartCoroutine(CheckMovement());
         }
     }
+    private void RotateWithMouse()
+    {
+        // マウスの現在位置と前フレームの位置の差を計算
+        float mouseMoveX = Input.GetAxis("Mouse X");
+        float mouseMoveY = Input.GetAxis("Mouse Y");
+
+        // マウスの移動量を回転に変換（感度を調整して強調）
+        float rotationAmountX = mouseMoveX * rotationSensitivity * rotationMultiplier;
+        float rotationAmountY = mouseMoveY * rotationSensitivity * rotationMultiplier;
+
+        // X軸（左右）方向とY軸（上下）方向の回転を計算
+        transform.Rotate(Vector3.up, rotationAmountX, Space.World); // 水平回転
+        transform.Rotate(Vector3.right, -rotationAmountY, Space.World); // 垂直回転
+    }
+
 }
