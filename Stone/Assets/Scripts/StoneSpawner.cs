@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class StoneSpawner : MonoBehaviour
 {
     // スポーンさせるゲームオブジェクトのリスト
     public List<GameObject> objectsToSpawn;
 
+    public GameObject deadCol;
     // スポーン先の位置
     public Transform spawnPosition;
     GameManager gameManager;
     // フラグ（条件に合わせて上げる）
     private bool onSpawn = false;
-    private float highestY;
+    public float highestY = 0;
+    public Text highText;
     void Start()
     {
+        highestY = Mathf.Floor(highestY * 10 * 200) / 10; // 初期値を明示的に切り捨て
+        highText.text = $"{highestY + 96}ｃｍ";
         // 初回のランダムスポーン
         SpawnRandomObject();
         gameManager = FindObjectOfType<GameManager>();
@@ -23,7 +27,14 @@ public class StoneSpawner : MonoBehaviour
     void Update()
     {
         highestY = GetHighestYValue(gameManager.SpawnedStones);
-
+        Vector3 DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.15f, deadCol.transform.position.z);
+        deadCol.transform.position = DeadColPos;
+        float highTextNum = Mathf.Floor(highestY* 3000) / 10;
+        if(highTextNum <= 0)
+        {
+            highTextNum = 0;
+        }
+        highText.text = $"{highTextNum }ｃｍ";
 
         AlignTargetToHighestY(this.gameObject, highestY+0.15f);
         // フラグが上がったときにランダムスポーン

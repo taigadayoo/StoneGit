@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StoneController : MonoBehaviour
 {
+    Timer timer;
     public float moveSpeed = 5f;
     public float rotationSensitivity = 1f;
     public float rotationMultiplier = 100f; // âÒì]ó Çëùâ¡Ç≥ÇπÇÈî{ó¶
@@ -17,6 +18,7 @@ public class StoneController : MonoBehaviour
     public float angularVelocityThreshold = 0.1f; // âÒì]ë¨ìxÇÃËáíl
     public float checkDelay = 0.5f; // É`ÉFÉbÉNä‘äuÅiïbÅj
 
+   
     private bool isKinematicSet = false;
 
     public enum StoneLevel
@@ -36,7 +38,7 @@ public class StoneController : MonoBehaviour
         rb.isKinematic = true;
         stoneSpawner = FindObjectOfType<StoneSpawner>();
         gameManager = FindObjectOfType<GameManager>();
-        
+        timer = FindFirstObjectByType<Timer>();
     }
 
     // Update is called once per frame
@@ -66,10 +68,10 @@ public class StoneController : MonoBehaviour
             col1.enabled = true;
             col2.enabled = true;
             rb.isKinematic = false;
-            gameManager.SpawnedStones.Add(this.gameObject);
+           
             stoneSpawner.StartRespawn(true);
             this.enabled = false;
-           
+            timer.ResetTimer();
         }
         RotateWithMouse();
     }
@@ -80,10 +82,10 @@ public class StoneController : MonoBehaviour
             float currentVelocity = rb.velocity.magnitude;
             float currentAngularVelocity = rb.angularVelocity.magnitude;
 
-            Debug.Log($"Velocity: {currentVelocity}, Angular Velocity: {currentAngularVelocity}");
-
             if (currentVelocity < velocityThreshold && currentAngularVelocity < angularVelocityThreshold)
             {
+                gameManager.SpawnedStones.Add(this.gameObject);
+                gameManager.AddRigidbody();
                 rb.isKinematic = true;
                 isKinematicSet = true;
             }
@@ -95,8 +97,18 @@ public class StoneController : MonoBehaviour
     {
         if (stoneLevel == StoneLevel.Easy)
         {
+           
             StartCoroutine(CheckMovement());
         }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Dead" && !isKinematicSet)
+        {
+            Debug.Log(this.gameObject);
+            gameManager.SetAllRigidbodiesKinematic(false);
+        }
+
     }
     private void RotateWithMouse()
     {
