@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,9 +14,16 @@ public class GameManager : MonoBehaviour
     public List<GameObject> SpawnedStones = new List<GameObject>();
     public List<Rigidbody> rigidbodyList = new List<Rigidbody>();
     public bool OnSide = false;
+    public bool IsGameOver = false;
+    public RectTransform targetRectTransform; // ìÆÇ©ÇµÇΩÇ¢RectTransform
+    [SerializeField]
+    Vector3 targetPosition = new Vector3(0, 0, 0);
+    [SerializeField]
+    float duration = 1;
+    Timer timer;
     private void Start()
     {
-      
+        timer = FindObjectOfType<Timer>();
         // ç≈èâÇ…camera1ÇóLå¯âªÅAcamera2Çñ≥å¯âª
         camera1.gameObject.SetActive(true);
         camera2.gameObject.SetActive(false);
@@ -62,6 +70,13 @@ public class GameManager : MonoBehaviour
                 rigidbodyList.Add(rb);
             }
         }
+    }
+    public void GameOver()
+    {
+        IsGameOver = true;
+        targetRectTransform.DOAnchorPos(targetPosition, duration).SetEase(Ease.OutCubic);
+        timer.timerText.gameObject.SetActive(false);
+        stoneSpawner.highText.gameObject.SetActive(false);
     }
   public  void SetAllRigidbodiesKinematic(bool isKinematic)
     {

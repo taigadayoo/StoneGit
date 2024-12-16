@@ -44,36 +44,39 @@ public class StoneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float moveInput = Input.GetAxisRaw("Horizontal"); // A/D キーまたは左/右矢印キー
-
-        // オブジェクトの右方向（ローカル座標系での右方向）を取得
-
-        // 水平方向に移動
-        Vector3 moveDirection;
-        if (gameManager.OnSide)
+        if (!gameManager.IsGameOver)
         {
-            // 手前（カメラ方向）/奥方向（カメラと逆方向）に移動
-            moveDirection = new Vector3(0f, 0f, moveInput * -moveSpeed * Time.deltaTime);
-        }
-        else
-        {
-            // 左右方向に移動
-            moveDirection = new Vector3(moveInput * -moveSpeed * Time.deltaTime, 0f, 0f);
-        }
+            float moveInput = Input.GetAxisRaw("Horizontal"); // A/D キーまたは左/右矢印キー
 
-        // 現在の位置に移動量を加算
-        transform.position += moveDirection;
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            col1.enabled = true;
-            col2.enabled = true;
-            rb.isKinematic = false;
-           
-            stoneSpawner.StartRespawn(true);
-            this.enabled = false;
-            timer.ResetTimer();
+            // オブジェクトの右方向（ローカル座標系での右方向）を取得
+
+            // 水平方向に移動
+            Vector3 moveDirection;
+            if (gameManager.OnSide)
+            {
+                // 手前（カメラ方向）/奥方向（カメラと逆方向）に移動
+                moveDirection = new Vector3(0f, 0f, moveInput * -moveSpeed * Time.deltaTime);
+            }
+            else
+            {
+                // 左右方向に移動
+                moveDirection = new Vector3(moveInput * -moveSpeed * Time.deltaTime, 0f, 0f);
+            }
+
+            // 現在の位置に移動量を加算
+            transform.position += moveDirection;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                col1.enabled = true;
+                col2.enabled = true;
+                rb.isKinematic = false;
+
+                stoneSpawner.StartRespawn(true);
+                this.enabled = false;
+                timer.ResetTimer();
+            }
+            RotateWithMouse();
         }
-        RotateWithMouse();
     }
     private System.Collections.IEnumerator CheckMovement()
     {
@@ -105,7 +108,7 @@ public class StoneController : MonoBehaviour
     {
         if(other.gameObject.tag == "Dead" && !isKinematicSet)
         {
-            Debug.Log(this.gameObject);
+            gameManager.GameOver();
             gameManager.SetAllRigidbodiesKinematic(false);
         }
 

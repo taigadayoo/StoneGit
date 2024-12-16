@@ -9,9 +9,11 @@ public class Timer : MonoBehaviour
     private float countdownTime = 11f; // カウントダウン時間（初期値10秒）
     private float currentTime;
     private bool isCounting = false;
-
+    
+    GameManager gameManager;
     void Start()
     {
+       gameManager =  FindFirstObjectByType<GameManager>();
         ResetTimer(); // タイマーをリセットして開始
     }
 
@@ -41,8 +43,8 @@ public class Timer : MonoBehaviour
     // タイマー終了時の処理
     private void TimerEnded()
     {
-        Debug.Log("タイマーが終了しました");
-        // ここに0秒になったときの処理を記述
+        gameManager.GameOver();
+       
     }
 
     // タイマー表示を更新

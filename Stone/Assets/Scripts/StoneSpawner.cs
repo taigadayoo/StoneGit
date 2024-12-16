@@ -15,6 +15,7 @@ public class StoneSpawner : MonoBehaviour
     private bool onSpawn = false;
     public float highestY = 0;
     public Text highText;
+    public Text NowScore;
     void Start()
     {
         highestY = Mathf.Floor(highestY * 10 * 200) / 10; // 初期値を明示的に切り捨て
@@ -26,22 +27,26 @@ public class StoneSpawner : MonoBehaviour
 
     void Update()
     {
-        highestY = GetHighestYValue(gameManager.SpawnedStones);
-        Vector3 DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.15f, deadCol.transform.position.z);
-        deadCol.transform.position = DeadColPos;
-        float highTextNum = Mathf.Floor(highestY* 3000) / 10;
-        if(highTextNum <= 0)
+        if (!gameManager.IsGameOver)
         {
-            highTextNum = 0;
-        }
-        highText.text = $"{highTextNum }ｃｍ";
+            highestY = GetHighestYValue(gameManager.SpawnedStones);
+            Vector3 DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.15f, deadCol.transform.position.z);
+            deadCol.transform.position = DeadColPos;
+            NowScore.text = highText.text;
+            float highTextNum = Mathf.Floor(highestY * 3000) / 10;
+            if (highTextNum <= 0)
+            {
+                highTextNum = 0;
+            }
+            highText.text = $"{highTextNum }ｃｍ";
 
-        AlignTargetToHighestY(this.gameObject, highestY+0.15f);
-        // フラグが上がったときにランダムスポーン
-        if (onSpawn)
-        {
-            SpawnRandomObject();
-            onSpawn = false; // フラグをリセット
+            AlignTargetToHighestY(this.gameObject, highestY + 0.15f);
+            // フラグが上がったときにランダムスポーン
+            if (onSpawn)
+            {
+                SpawnRandomObject();
+                onSpawn = false; // フラグをリセット
+            }
         }
     }
 
