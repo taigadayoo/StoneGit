@@ -38,7 +38,7 @@ public class StoneSpawner : MonoBehaviour
             {
                 highTextNum = 0;
             }
-            highText.text = $"{highTextNum }ｃｍ";
+            highText.text = $"{highTextNum }cm";
 
             AlignTargetToHighestY(this.gameObject, highestY + 0.15f);
             // フラグが上がったときにランダムスポーン
