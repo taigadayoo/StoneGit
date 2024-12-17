@@ -20,8 +20,12 @@ public class StoneSpawner : MonoBehaviour
     [SerializeField]
     DemonIEvent demonEvent;
     public float highTextNum;
+    private Vector3 DeadColPos;
     void Start()
     {
+        highText = GameObject.Find("Highest").GetComponent<Text>();
+        NowScore = GameObject.Find("ResultScore").GetComponent<Text>();
+        highText.gameObject.SetActive(true);
         highestY = Mathf.Floor(highestY * 10 * 200) / 10; // 初期値を明示的に切り捨て
         highText.text = $"{highestY + 96}ｃｍ";
         // 初回のランダムスポーン
@@ -39,8 +43,15 @@ public class StoneSpawner : MonoBehaviour
             if (OnStone)
             {
                 AlignTargetToHighestY(this.gameObject, highestYMathf + 0.17f);
-                Vector3 DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.25f, deadCol.transform.position.z);
-                deadCol.transform.position = DeadColPos;
+                if (gameManager.gameMode == GameManager.GameMode.nomal)
+                {
+                    DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.25f, deadCol.transform.position.z);
+                }
+                else if (gameManager.gameMode == GameManager.GameMode.challenge)
+                 {
+                     DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.35f, deadCol.transform.position.z);
+                 }
+                    deadCol.transform.position = DeadColPos;
             }
             NowScore.text = highText.text;
             highTextNum = Mathf.Floor(highestY * 3000) / 10;

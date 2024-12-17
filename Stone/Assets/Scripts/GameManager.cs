@@ -21,9 +21,27 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     float duration = 1;
     Timer timer;
+    public enum GameMode
+    {
+        nomal,
+        challenge,
+        buttle
+    }
+    [SerializeField]
+   public GameMode gameMode;
     private void Start()
     {
-        timer = FindObjectOfType<Timer>();
+        if (gameMode == GameMode.nomal)
+        {
+            RankingManager.Instance.TextSave();
+            RankingManager.Instance.UpdateRankingDisplay();
+        }else if (gameMode == GameMode.challenge)
+        {
+            RankingManager.Instance.TextSaveChallenge();
+            RankingManager.Instance.UpdateChallengeRankingDisplay();
+        }
+
+            timer = FindObjectOfType<Timer>();
         // ç≈èâÇ…camera1ÇóLå¯âªÅAcamera2Çñ≥å¯âª
         camera1.gameObject.SetActive(true);
         camera2.gameObject.SetActive(false);
@@ -55,6 +73,21 @@ public class GameManager : MonoBehaviour
             camera2.gameObject.SetActive(isCamera1Active);
 
             OnSide = isCamera1Active;
+        }
+        if(IsGameOver && Input.GetKeyDown(KeyCode.Space))
+        {
+            if (gameMode == GameMode.nomal)
+            {
+                SceneManagement.Instance.OnGame();
+            }
+            else if (gameMode == GameMode.challenge)
+            {
+                SceneManagement.Instance.OnChallenge();
+            }
+        }
+        if (IsGameOver && Input.GetKeyDown(KeyCode.T))
+        {
+            SceneManagement.Instance.OnTitle();
         }
     }
     public void AddRigidbody()

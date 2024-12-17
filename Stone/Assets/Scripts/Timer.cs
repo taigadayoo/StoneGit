@@ -15,6 +15,7 @@ public class Timer : MonoBehaviour
     {
        gameManager =  FindFirstObjectByType<GameManager>();
         ResetTimer(); // タイマーをリセットして開始
+        timerText.gameObject.SetActive(true);
     }
 
     void Update()

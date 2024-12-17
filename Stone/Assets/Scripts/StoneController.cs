@@ -98,11 +98,9 @@ public class StoneController : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (stoneLevel == StoneLevel.Easy)
-        {
-           
+     
             StartCoroutine(CheckMovement());
-        }
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -110,7 +108,14 @@ public class StoneController : MonoBehaviour
         {
             gameManager.GameOver();
             gameManager.SetAllRigidbodiesKinematic(false);
-            rankingManager.AddScore(stoneSpawner.highTextNum);
+            if (stoneLevel == StoneLevel.Easy)
+            {
+                RankingManager.Instance.UpdateRanking(stoneSpawner.highTextNum);
+            }else if (stoneLevel == StoneLevel.Nomal)
+            {
+                RankingManager.Instance.UpdateRankingChallenge(stoneSpawner.highTextNum);
+            }
+
         }
 
     }
