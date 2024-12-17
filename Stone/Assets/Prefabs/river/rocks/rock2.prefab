@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5266112889302576210}
   - component: {fileID: 8904485514168834175}
   - component: {fileID: -5939600076431166418}
-  - component: {fileID: 4441380449306665363}
   m_Layer: 0
   m_Name: rock2
   m_TagString: Untagged
@@ -32,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7076531, y: 0.1646322, z: 0.059137028, w: 0.68456274}
   m_LocalPosition: {x: 2.0772805, y: -0.01580623, z: 0.6716915}
-  m_LocalScale: {x: 4.630796, y: 4.161512, z: 2.31286}
+  m_LocalScale: {x: 4.63, y: 4.161, z: 2.31}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -152,29 +151,7 @@ MonoBehaviour:
   rotationSensitivity: 1
   rotationMultiplier: 10
   col1: {fileID: 4851371785865167835, guid: c26128d9672f16e4e91de6d8f24892b8, type: 3}
-  col2: {fileID: 2652554859817833297, guid: c26128d9672f16e4e91de6d8f24892b8, type: 3}
   velocityThreshold: 1
   angularVelocityThreshold: 1
   checkDelay: 0.3
   stoneLevel: 1
---- !u!65 &4441380449306665363
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1227733786133062139}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.008941825, y: 0.009379765, z: 0.026406337}
-  m_Center: {x: 0.0012851832, y: 0.00046359838, z: -0.00040065352}

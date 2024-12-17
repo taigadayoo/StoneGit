@@ -12,7 +12,6 @@ public class StoneController : MonoBehaviour
     Rigidbody rb;
     StoneSpawner stoneSpawner;
    public Collider col1;
-   public Collider col2;
     GameManager gameManager;
     public float velocityThreshold = 0.1f; // 速度の閾値
     public float angularVelocityThreshold = 0.1f; // 回転速度の閾値
@@ -33,7 +32,7 @@ public class StoneController : MonoBehaviour
     {
       
         col1.enabled = false;
-        col2.enabled = false;
+
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
         stoneSpawner = FindObjectOfType<StoneSpawner>();
@@ -68,7 +67,7 @@ public class StoneController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 col1.enabled = true;
-                col2.enabled = true;
+
                 rb.isKinematic = false;
 
                 stoneSpawner.StartRespawn(true);
@@ -91,6 +90,7 @@ public class StoneController : MonoBehaviour
                 gameManager.AddRigidbody();
                 rb.isKinematic = true;
                 isKinematicSet = true;
+                stoneSpawner.OnStone = true;
             }
 
             yield return new WaitForSeconds(checkDelay);

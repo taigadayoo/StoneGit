@@ -14,8 +14,11 @@ public class StoneSpawner : MonoBehaviour
     // フラグ（条件に合わせて上げる）
     private bool onSpawn = false;
     public float highestY = 0;
+    public bool OnStone = false;
     public Text highText;
     public Text NowScore;
+    [SerializeField]
+    DemonIEvent demonEvent;
     void Start()
     {
         highestY = Mathf.Floor(highestY * 10 * 200) / 10; // 初期値を明示的に切り捨て
@@ -29,9 +32,15 @@ public class StoneSpawner : MonoBehaviour
     {
         if (!gameManager.IsGameOver)
         {
+            
             highestY = GetHighestYValue(gameManager.SpawnedStones);
-            Vector3 DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.15f, deadCol.transform.position.z);
-            deadCol.transform.position = DeadColPos;
+            float highestYMathf = Mathf.Round(highestY * 1000f) / 1000f;
+            if (OnStone)
+            {
+                AlignTargetToHighestY(this.gameObject, highestYMathf + 0.17f);
+                Vector3 DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.25f, deadCol.transform.position.z);
+                deadCol.transform.position = DeadColPos;
+            }
             NowScore.text = highText.text;
             float highTextNum = Mathf.Floor(highestY * 3000) / 10;
             if (highTextNum <= 0)
@@ -40,10 +49,11 @@ public class StoneSpawner : MonoBehaviour
             }
             highText.text = $"{highTextNum }cm";
 
-            AlignTargetToHighestY(this.gameObject, highestY + 0.15f);
+           
             // フラグが上がったときにランダムスポーン
             if (onSpawn)
             {
+                //demonEvent.EventCall();
                 SpawnRandomObject();
                 onSpawn = false; // フラグをリセット
             }
