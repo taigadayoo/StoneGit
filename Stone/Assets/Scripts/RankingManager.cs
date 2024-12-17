@@ -52,6 +52,8 @@ public class RankingManager : MonoBehaviour
     // ランキングの表示を更新するメソッド
     public void UpdateRanking(float score)
     {
+        if (score == 0) return; // スコアが0の場合は処理をスキップ
+
         // ランキングリストを更新
         rankingScores.Add(score);
         rankingScores.Sort((a, b) => b.CompareTo(a)); // 降順にソート
@@ -67,6 +69,8 @@ public class RankingManager : MonoBehaviour
     }
     public void UpdateRankingChallenge(float score)
     {
+        if (score == 0) return; // スコアが0の場合は処理をスキップ
+
         // ランキングリストを更新
         challengeRankingScores.Add(score);
         challengeRankingScores.Sort((a, b) => b.CompareTo(a)); // 降順にソート
@@ -83,21 +87,30 @@ public class RankingManager : MonoBehaviour
     // ランキングテキストを更新するメソッド
     public void UpdateRankingDisplay()
     {
-        for (int i = 0; i < rankingScores.Count; i++)
+        for (int i = 0; i < rankingTexts.Length; i++) // 3つのランキング枠を固定で表示
         {
-            if (i < rankingTexts.Length)
+            if (i < rankingScores.Count) // スコアが存在する場合
             {
-                rankingTexts[i].text = (i + 1) + "位:" + rankingScores[i].ToString()+ "cm";
+                rankingTexts[i].text = (i + 1) + "位:" + rankingScores[i].ToString() + "cm";
+            }
+            else // スコアが存在しない場合
+            {
+                rankingTexts[i].text = (i + 1) + "位:---";
             }
         }
     }
+
     public void UpdateChallengeRankingDisplay()
     {
-        for (int i = 0; i < challengeRankingScores.Count; i++)
+        for (int i = 0; i < challengeRankingTexts.Length; i++) // 3つのランキング枠を固定で表示
         {
-            if (i < challengeRankingTexts.Length)
+            if (i < challengeRankingScores.Count) // スコアが存在する場合
             {
                 challengeRankingTexts[i].text = (i + 1) + "位:" + challengeRankingScores[i].ToString() + "cm";
+            }
+            else // スコアが存在しない場合
+            {
+                challengeRankingTexts[i].text = (i + 1) + "位:---";
             }
         }
     }
