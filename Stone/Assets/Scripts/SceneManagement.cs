@@ -7,6 +7,7 @@ public class SceneManagement : MonoBehaviour
     [SerializeField] private string Title;
     [SerializeField] private string Game;
     [SerializeField] private string Challenge;
+    [SerializeField] private string Battle;
     [SerializeField] private Color fadeColor = Color.black;
     [SerializeField] private float fadeSpeedMultiplier = 1.0f;
     // Start is called before the first frame update
@@ -58,5 +59,9 @@ public class SceneManagement : MonoBehaviour
     public void OnChallenge()
     {
         Initiate.Fade(Challenge, fadeColor, fadeSpeedMultiplier);
+    }
+    public void OnBattle()
+    {
+        Initiate.Fade(Battle, fadeColor, fadeSpeedMultiplier);
     }
 }

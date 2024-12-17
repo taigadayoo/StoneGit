@@ -27,4 +27,8 @@ public class ButtonManager : MonoBehaviour
     {
         SceneManagement.Instance.OnChallenge();
     }
+    public void OnBattle()
+    {
+        SceneManagement.Instance.OnBattle();
+    }
 }

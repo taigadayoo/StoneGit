@@ -43,7 +43,7 @@ public class StoneSpawner : MonoBehaviour
             if (OnStone)
             {
                 AlignTargetToHighestY(this.gameObject, highestYMathf + 0.17f);
-                if (gameManager.gameMode == GameManager.GameMode.nomal)
+                if (gameManager.gameMode == GameManager.GameMode.nomal || gameManager.gameMode == GameManager.GameMode.buttle)
                 {
                     DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.25f, deadCol.transform.position.z);
                 }
@@ -65,7 +65,11 @@ public class StoneSpawner : MonoBehaviour
             // フラグが上がったときにランダムスポーン
             if (onSpawn)
             {
-                //demonEvent.EventCall();
+                gameManager.On1pTurn = !gameManager.On1pTurn;
+                if (gameManager.gameMode == GameManager.GameMode.buttle)
+                {
+                    gameManager.BattleStart();
+                }
                 SpawnRandomObject();
                 onSpawn = false; // フラグをリセット
             }

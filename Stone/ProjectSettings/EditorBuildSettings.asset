@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ChallegeScene.unity
     guid: 7989daa9a2031f543906d632cf721a4c
+  - enabled: 1
+    path: Assets/Scenes/BattleScene.unity
+    guid: 94da5ba2f8fc95c4f87e24d8b94524a0
   m_configObjects: {}

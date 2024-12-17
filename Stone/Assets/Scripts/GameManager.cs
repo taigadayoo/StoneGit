@@ -19,8 +19,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     Vector3 targetPosition = new Vector3(0, 0, 0);
     [SerializeField]
+    Vector3 movedPosition = new Vector3(-5, 0, 0);
+    [SerializeField]
     float duration = 1;
     Timer timer;
+    public bool On1pTurn = false;
+    public bool turnStart = false;
+    [SerializeField]
+    GameObject[] turnUI;
+    private Vector3 savedPosition;
+    public RectTransform turnPanelPosition; // ìÆÇ©ÇµÇΩÇ¢RectTransform
     public enum GameMode
     {
         nomal,
@@ -40,7 +48,11 @@ public class GameManager : MonoBehaviour
             RankingManager.Instance.TextSaveChallenge();
             RankingManager.Instance.UpdateChallengeRankingDisplay();
         }
-
+        else if(gameMode == GameMode.buttle)
+        {
+            BattleStart();
+            savedPosition = turnPanelPosition.anchoredPosition;
+        }
             timer = FindObjectOfType<Timer>();
         // ç≈èâÇ…camera1ÇóLå¯âªÅAcamera2Çñ≥å¯âª
         camera1.gameObject.SetActive(true);
@@ -84,6 +96,10 @@ public class GameManager : MonoBehaviour
             {
                 SceneManagement.Instance.OnChallenge();
             }
+            else if (gameMode == GameMode.buttle)
+            {
+                SceneManagement.Instance.OnBattle();
+            }
         }
         if (IsGameOver && Input.GetKeyDown(KeyCode.T))
         {
@@ -106,6 +122,11 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
+        if (gameMode == GameMode.buttle)
+        {
+            turnUI[3].SetActive(false);
+            turnUI[4].SetActive(false);
+        }
         IsGameOver = true;
         targetRectTransform.DOAnchorPos(targetPosition, duration).SetEase(Ease.OutCubic);
         timer.timerText.gameObject.SetActive(false);
@@ -117,5 +138,42 @@ public class GameManager : MonoBehaviour
         {
             rb.isKinematic = isKinematic;
         }
+    }
+    public void BattleStart()
+    {
+        StartCoroutine(TurnPanelAnim());
+    }
+    public IEnumerator TurnPanelAnim()
+    {
+        turnStart = false;
+        yield return new WaitForSeconds(0.5f);
+        turnPanelPosition.DOAnchorPos(targetPosition,1f).SetEase(Ease.OutCubic);
+        if(!On1pTurn)
+        {
+            turnUI[1].SetActive(true);
+            turnUI[2].SetActive(false);
+            turnUI[3].SetActive(true);
+            turnUI[4].SetActive(false);
+            turnUI[5].SetActive(false);
+            turnUI[6].SetActive(true);
+        }
+        else
+        {
+            turnUI[1].SetActive(false);
+            turnUI[2].SetActive(true);
+            turnUI[3].SetActive(false);
+            turnUI[4].SetActive(true);
+            turnUI[5].SetActive(true);
+            turnUI[6].SetActive(false);
+        }
+
+        yield return new WaitForSeconds(1.5f);
+
+        turnPanelPosition.DOAnchorPos(movedPosition, 0.5f).SetEase(Ease.OutCubic);
+
+        yield return new WaitForSeconds(0.5f);
+
+        turnPanelPosition.anchoredPosition = savedPosition;
+        turnStart = true;
     }
 }

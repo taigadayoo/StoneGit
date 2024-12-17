@@ -14,7 +14,7 @@ public class Timer : MonoBehaviour
     void Start()
     {
        gameManager =  FindFirstObjectByType<GameManager>();
-        ResetTimer(); // タイマーをリセットして開始
+        StartTimer(); // タイマーをリセットして開始
         timerText.gameObject.SetActive(true);
     }
 
@@ -32,12 +32,24 @@ public class Timer : MonoBehaviour
             UpdateTimerDisplay(); // 表示を更新
         }
     }
-
+    public void StartTimer()
+    {
+        StartCoroutine(ResetTimer());
+    }
     // タイマーをリセットして開始
-    public void ResetTimer()
+    public IEnumerator ResetTimer()
     {
         currentTime = countdownTime;
-        isCounting = true;
+        if (gameManager.gameMode == GameManager.GameMode.challenge || gameManager.gameMode == GameManager.GameMode.nomal)
+        {
+            isCounting = true;
+        }else if(gameManager.gameMode == GameManager.GameMode.buttle)
+        {
+            timerText.text  = $"残り10秒";
+            isCounting = false;
+            yield return new WaitForSeconds(2.5f);
+            isCounting = true;
+        }
         UpdateTimerDisplay();
     }
 

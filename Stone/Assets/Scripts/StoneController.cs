@@ -45,36 +45,72 @@ public class StoneController : MonoBehaviour
     {
         if (!gameManager.IsGameOver)
         {
-            float moveInput = Input.GetAxisRaw("Horizontal"); // A/D キーまたは左/右矢印キー
-
-            // オブジェクトの右方向（ローカル座標系での右方向）を取得
-
-            // 水平方向に移動
-            Vector3 moveDirection;
-            if (gameManager.OnSide)
+            if (gameManager.gameMode == GameManager.GameMode.challenge || gameManager.gameMode == GameManager.GameMode.nomal)
             {
-                // 手前（カメラ方向）/奥方向（カメラと逆方向）に移動
-                moveDirection = new Vector3(0f, 0f, moveInput * -moveSpeed * Time.deltaTime);
+                float moveInput = Input.GetAxisRaw("Horizontal"); // A/D キーまたは左/右矢印キー
+
+                // オブジェクトの右方向（ローカル座標系での右方向）を取得
+
+                // 水平方向に移動
+                Vector3 moveDirection;
+                if (gameManager.OnSide)
+                {
+                    // 手前（カメラ方向）/奥方向（カメラと逆方向）に移動
+                    moveDirection = new Vector3(0f, 0f, moveInput * -moveSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    // 左右方向に移動
+                    moveDirection = new Vector3(moveInput * -moveSpeed * Time.deltaTime, 0f, 0f);
+                }
+
+                // 現在の位置に移動量を加算
+                transform.position += moveDirection;
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    col1.enabled = true;
+
+                    rb.isKinematic = false;
+
+                    stoneSpawner.StartRespawn(true);
+                    this.enabled = false;
+                    timer.StartTimer();
+                }
+                RotateWithMouse();
             }
-            else
+            else if(gameManager.gameMode == GameManager.GameMode.buttle && gameManager.turnStart)
             {
-                // 左右方向に移動
-                moveDirection = new Vector3(moveInput * -moveSpeed * Time.deltaTime, 0f, 0f);
+                float moveInput = Input.GetAxisRaw("Horizontal"); // A/D キーまたは左/右矢印キー
+
+                // オブジェクトの右方向（ローカル座標系での右方向）を取得
+
+                // 水平方向に移動
+                Vector3 moveDirection;
+                if (gameManager.OnSide)
+                {
+                    // 手前（カメラ方向）/奥方向（カメラと逆方向）に移動
+                    moveDirection = new Vector3(0f, 0f, moveInput * -moveSpeed * Time.deltaTime);
+                }
+                else
+                {
+                    // 左右方向に移動
+                    moveDirection = new Vector3(moveInput * -moveSpeed * Time.deltaTime, 0f, 0f);
+                }
+
+                // 現在の位置に移動量を加算
+                transform.position += moveDirection;
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    col1.enabled = true;
+
+                    rb.isKinematic = false;
+
+                    stoneSpawner.StartRespawn(true);
+                    this.enabled = false;
+                    timer.StartTimer();
+                }
+                RotateWithMouse();
             }
-
-            // 現在の位置に移動量を加算
-            transform.position += moveDirection;
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                col1.enabled = true;
-
-                rb.isKinematic = false;
-
-                stoneSpawner.StartRespawn(true);
-                this.enabled = false;
-                timer.ResetTimer();
-            }
-            RotateWithMouse();
         }
     }
     private System.Collections.IEnumerator CheckMovement()
@@ -108,7 +144,7 @@ public class StoneController : MonoBehaviour
         {
             gameManager.GameOver();
             gameManager.SetAllRigidbodiesKinematic(false);
-            if (stoneLevel == StoneLevel.Easy)
+            if (stoneLevel == StoneLevel.Easy && gameManager.gameMode == GameManager.GameMode.nomal)
             {
                 RankingManager.Instance.UpdateRanking(stoneSpawner.highTextNum);
             }else if (stoneLevel == StoneLevel.Nomal)
