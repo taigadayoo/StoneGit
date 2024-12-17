@@ -19,6 +19,7 @@ public class StoneSpawner : MonoBehaviour
     public Text NowScore;
     [SerializeField]
     DemonIEvent demonEvent;
+    public float highTextNum;
     void Start()
     {
         highestY = Mathf.Floor(highestY * 10 * 200) / 10; // ‰Šú’l‚ğ–¾¦“I‚ÉØ‚èÌ‚Ä
@@ -42,7 +43,7 @@ public class StoneSpawner : MonoBehaviour
                 deadCol.transform.position = DeadColPos;
             }
             NowScore.text = highText.text;
-            float highTextNum = Mathf.Floor(highestY * 3000) / 10;
+            highTextNum = Mathf.Floor(highestY * 3000) / 10;
             if (highTextNum <= 0)
             {
                 highTextNum = 0;

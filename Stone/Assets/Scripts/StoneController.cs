@@ -16,7 +16,7 @@ public class StoneController : MonoBehaviour
     public float velocityThreshold = 0.1f; // 速度の閾値
     public float angularVelocityThreshold = 0.1f; // 回転速度の閾値
     public float checkDelay = 0.5f; // チェック間隔（秒）
-
+    RankingManager rankingManager;
    
     private bool isKinematicSet = false;
 
@@ -32,7 +32,7 @@ public class StoneController : MonoBehaviour
     {
       
         col1.enabled = false;
-
+        rankingManager = FindObjectOfType<RankingManager>();
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
         stoneSpawner = FindObjectOfType<StoneSpawner>();
@@ -110,6 +110,7 @@ public class StoneController : MonoBehaviour
         {
             gameManager.GameOver();
             gameManager.SetAllRigidbodiesKinematic(false);
+            rankingManager.AddScore(stoneSpawner.highTextNum);
         }
 
     }

@@ -151,7 +151,7 @@ MonoBehaviour:
   rotationSensitivity: 1
   rotationMultiplier: 10
   col1: {fileID: 925472207881190833}
-  velocityThreshold: 2.2
-  angularVelocityThreshold: 2.2
+  velocityThreshold: 1.9
+  angularVelocityThreshold: 1.9
   checkDelay: 0.3
   stoneLevel: 1
