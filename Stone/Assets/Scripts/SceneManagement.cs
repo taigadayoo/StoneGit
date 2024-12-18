@@ -50,18 +50,22 @@ public class SceneManagement : MonoBehaviour
     }
     public void OnTitle()
     {
+        SoundManager.Instance.StopBgm();
         Initiate.Fade(Title, fadeColor, fadeSpeedMultiplier);
     }
     public void OnGame()
     {
+        SoundManager.Instance.StopBgm();
         Initiate.Fade(Game, fadeColor, fadeSpeedMultiplier);
     }
     public void OnChallenge()
     {
+        SoundManager.Instance.StopBgm();
         Initiate.Fade(Challenge, fadeColor, fadeSpeedMultiplier);
     }
     public void OnBattle()
     {
+        SoundManager.Instance.StopBgm();
         Initiate.Fade(Battle, fadeColor, fadeSpeedMultiplier);
     }
 }

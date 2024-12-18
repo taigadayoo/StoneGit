@@ -18,6 +18,8 @@ public enum BgmType
     None = 0,
     BGM1,
     BGM2,
+    BGM3,
+
     // 他のBGMタイプをここに追加
 }
 
@@ -40,6 +42,9 @@ public enum SeType
     SE1,
     SE2,
     SE3,
+    SE4,
+    SE5,
+    SE6
 }
 
 #endregion
@@ -124,7 +129,7 @@ public class SoundManager : MonoBehaviour
         SeData seData = seList.Find(s => s.Type == type);
         if (seData == null || seData.Type == SeType.None)
         {
-            Debug.LogError("指定のTypeのSEが見つかりませんでした。\nSoundManagerに登録しておください。");
+            Debug.Log("指定のTypeのSEが見つかりませんでした。\nSoundManagerに登録しておください。");
             return;
         }
         

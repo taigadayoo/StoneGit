@@ -42,10 +42,12 @@ public class GameManager : MonoBehaviour
        
         if (gameMode == GameMode.nomal)
         {
+            SoundManager.Instance.PlayBgm(BgmType.BGM3);
             RankingManager.Instance.TextSave();
             RankingManager.Instance.UpdateRankingDisplay();
         }else if (gameMode == GameMode.challenge)
         {
+            SoundManager.Instance.PlayBgm(BgmType.BGM3);
             RankingManager.Instance.TextSaveChallenge();
             RankingManager.Instance.UpdateChallengeRankingDisplay();
         }
@@ -124,6 +126,8 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
+        SoundManager.Instance.StopBgm();
+        SoundManager.Instance.PlaySe(SeType.SE4);
         if (gameMode == GameMode.buttle)
         {
             turnUI[3].SetActive(false);
@@ -147,8 +151,10 @@ public class GameManager : MonoBehaviour
     }
     public IEnumerator TurnPanelAnim()
     {
+      
         turnStart = false;
         yield return new WaitForSeconds(0.5f);
+        SoundManager.Instance.PlaySe(SeType.SE5);
         turnPanelPosition.DOAnchorPos(targetPosition,1f).SetEase(Ease.OutCubic);
         if(!On1pTurn)
         {

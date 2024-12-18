@@ -1253,7 +1253,10 @@ MonoBehaviour:
     Volume: 0.58
   - Type: 2
     Clip: {fileID: 8300000, guid: 4a5ee3444333d8b43b3fef0d95309950, type: 3}
-    Volume: 0.591
+    Volume: 0.402
+  - Type: 3
+    Clip: {fileID: 8300000, guid: 22295e3ba18ac4b459c9f3465d221cc6, type: 3}
+    Volume: 0.579
   seList:
   - Type: 1
     Clip: {fileID: 8300000, guid: 5064cc0295b4cb84e926bfe55b9ec411, type: 3}
@@ -1261,6 +1264,15 @@ MonoBehaviour:
   - Type: 2
     Clip: {fileID: 8300000, guid: 7807077dd0f32a841ad44d4b34f349d4, type: 3}
     Volume: 0.547
+  - Type: 3
+    Clip: {fileID: 8300000, guid: 1670a3ec97a79f14b8cbe30a8dcc0d62, type: 3}
+    Volume: 1
+  - Type: 4
+    Clip: {fileID: 8300000, guid: 4764e0065a0d9e548a396cf938bc61f0, type: 3}
+    Volume: 0.514
+  - Type: 5
+    Clip: {fileID: 8300000, guid: a325ce3925dfec441bf90a083ada2811, type: 3}
+    Volume: 0.756
   fadeDuration: 1
 --- !u!4 &895237958
 Transform:

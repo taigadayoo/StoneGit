@@ -134,7 +134,7 @@ public class StoneController : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-     
+        SoundManager.Instance.PlaySe(SeType.SE3);
             StartCoroutine(CheckMovement());
 
     }
@@ -142,6 +142,7 @@ public class StoneController : MonoBehaviour
     {
         if(other.gameObject.tag == "Dead" && !isKinematicSet)
         {
+          
             gameManager.GameOver();
             gameManager.SetAllRigidbodiesKinematic(false);
             if (stoneLevel == StoneLevel.Easy && gameManager.gameMode == GameManager.GameMode.nomal)

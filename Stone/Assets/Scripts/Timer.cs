@@ -56,7 +56,10 @@ public class Timer : MonoBehaviour
     // タイマー終了時の処理
     private void TimerEnded()
     {
-        gameManager.GameOver();
+        if (!gameManager.IsGameOver)
+        {
+            gameManager.GameOver();
+        }
        
     }
 
