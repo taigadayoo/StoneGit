@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
    public GameMode gameMode;
     private void Start()
     {
+       
         if (gameMode == GameMode.nomal)
         {
             RankingManager.Instance.TextSave();
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
         }
         else if(gameMode == GameMode.buttle)
         {
+            SoundManager.Instance.PlayBgm(BgmType.BGM2);
             BattleStart();
             savedPosition = turnPanelPosition.anchoredPosition;
         }

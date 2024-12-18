@@ -18,21 +18,25 @@ public class ButtonManager : MonoBehaviour
     public void OnTitle()
     {
         SoundManager.Instance.StopBgm();
+        SoundManager.Instance.PlaySe(SeType.SE2);
         SceneManagement.Instance.OnTitle();
     }
     public void OnGame()
     {
         SoundManager.Instance.StopBgm();
+        SoundManager.Instance.PlaySe(SeType.SE2);
         SceneManagement.Instance.OnGame();
     }
     public void OnChallenge()
     {
         SoundManager.Instance.StopBgm();
+        SoundManager.Instance.PlaySe(SeType.SE2);
         SceneManagement.Instance.OnChallenge();
     }
     public void OnBattle()
     {
         SoundManager.Instance.StopBgm();
+        SoundManager.Instance.PlaySe(SeType.SE2);
         SceneManagement.Instance.OnBattle();
     }
 }

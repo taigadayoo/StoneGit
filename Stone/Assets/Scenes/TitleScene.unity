@@ -1254,7 +1254,13 @@ MonoBehaviour:
   - Type: 2
     Clip: {fileID: 8300000, guid: 4a5ee3444333d8b43b3fef0d95309950, type: 3}
     Volume: 0.591
-  seList: []
+  seList:
+  - Type: 1
+    Clip: {fileID: 8300000, guid: 5064cc0295b4cb84e926bfe55b9ec411, type: 3}
+    Volume: 0.343
+  - Type: 2
+    Clip: {fileID: 8300000, guid: 7807077dd0f32a841ad44d4b34f349d4, type: 3}
+    Volume: 0.547
   fadeDuration: 1
 --- !u!4 &895237958
 Transform:

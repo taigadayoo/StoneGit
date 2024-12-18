@@ -14,6 +14,7 @@ public class ButtonScaleEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     // マウスが重なったとき
     public void OnPointerEnter(PointerEventData eventData)
     {
+        SoundManager.Instance.PlaySe(SeType.SE1);
         transform.localScale = originalScale * scaleFactor; // 拡大
     }
 
