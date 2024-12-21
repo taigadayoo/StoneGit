@@ -9,10 +9,14 @@ public class RankingManager : MonoBehaviour
 
     public Text[] rankingTexts; // ランキング用テキスト配列
     public Text[] challengeRankingTexts; // ランキング用テキスト配列
+    public Text[] rankingSceneText;
+    public Text[] rankingSceneChallengeText;
 
     public List<float> rankingScores = new List<float>(); // スコアのリスト
     public List<float> challengeRankingScores = new List<float>();
-
+    [SerializeField]
+  public  ButtonManager buttonManager;
+    
     void Awake()
     {
         // シングルトン管理
@@ -34,7 +38,7 @@ public class RankingManager : MonoBehaviour
 
     void Start()
     {
-
+     
     }
 
     public void TextSave()
@@ -48,6 +52,18 @@ public class RankingManager : MonoBehaviour
         challengeRankingTexts[0] = GameObject.Find("First_C").GetComponent<Text>();
         challengeRankingTexts[1] = GameObject.Find("Second_C").GetComponent<Text>();
         challengeRankingTexts[2] = GameObject.Find("Thard_C").GetComponent<Text>();
+    }
+    public void TextSaveRankingScene()
+    {
+        rankingSceneText[0] = buttonManager.rankTextObjects[0];
+        rankingSceneText[1] = buttonManager.rankTextObjects[1];
+        rankingSceneText[2] = buttonManager.rankTextObjects[2];
+    }
+    public void TextSaveRankingChallengeScene()
+    {
+        rankingSceneChallengeText[0] = buttonManager.rankTextObjects[3];
+        rankingSceneChallengeText[1] = buttonManager.rankTextObjects[4];
+        rankingSceneChallengeText[2] = buttonManager.rankTextObjects[5];
     }
     // ランキングの表示を更新するメソッド
     public void UpdateRanking(float score)
@@ -111,6 +127,36 @@ public class RankingManager : MonoBehaviour
             else // スコアが存在しない場合
             {
                 challengeRankingTexts[i].text = (i + 1) + "位:---";
+            }
+        }
+    }
+    public void ReloadRanking()
+    {
+        
+        for (int i = 0; i < rankingSceneText.Length; i++) // 3つのランキング枠を固定で表示
+        {
+            if (i < rankingScores.Count) // スコアが存在する場合
+            {
+                rankingSceneText[i].text = (i + 1) + "位:" + rankingScores[i].ToString() + "cm";
+            }
+            else // スコアが存在しない場合
+            {
+                rankingSceneText[i].text = (i + 1) + "位:---";
+            }
+        }
+    }
+    public void ReloadChallengeRanking()
+    {
+
+        for (int i = 0; i < rankingSceneChallengeText.Length; i++) // 3つのランキング枠を固定で表示
+        {
+            if (i < challengeRankingScores.Count) // スコアが存在する場合
+            {
+                rankingSceneChallengeText[i].text = (i + 1) + "位:" + challengeRankingScores[i].ToString() + "cm";
+            }
+            else // スコアが存在しない場合
+            {
+                rankingSceneChallengeText[i].text = (i + 1) + "位:---";
             }
         }
     }
