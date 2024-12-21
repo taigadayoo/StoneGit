@@ -42,7 +42,7 @@ public class StoneSpawner : MonoBehaviour
             float highestYMathf = Mathf.Round(highestY * 1000f) / 1000f;
             if (OnStone)
             {
-                AlignTargetToHighestY(this.gameObject, highestYMathf + 0.17f);
+                AlignTargetToHighestY(this.gameObject, highestYMathf + 0.15f);
                 if (gameManager.gameMode == GameManager.GameMode.nomal || gameManager.gameMode == GameManager.GameMode.buttle)
                 {
                     DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.25f, deadCol.transform.position.z);
@@ -54,7 +54,7 @@ public class StoneSpawner : MonoBehaviour
                     deadCol.transform.position = DeadColPos;
             }
             NowScore.text = highText.text;
-            highTextNum = Mathf.Floor(highestY * 3000) / 10;
+            highTextNum = Mathf.Floor(highestY * 2000) / 10;
             if (highTextNum <= 0)
             {
                 highTextNum = 0;
@@ -104,21 +104,21 @@ public class StoneSpawner : MonoBehaviour
     }
     private float GetHighestYValue(List<GameObject> objList)
     {
-        float maxY = float.MinValue; // 初期値を非常に低い値に設定
+        highestY = float.MinValue;
 
         foreach (GameObject obj in objList)
         {
-            if (obj != null) // オブジェクトが存在する場合のみ処理
+            if (obj.TryGetComponent<Collider>(out Collider collider))
             {
-                float currentY = obj.transform.position.y;
-                if (currentY > maxY)
+                float topY = collider.bounds.max.y; // オブジェクトの最上部のY座標
+                if (topY > highestY)
                 {
-                    maxY = currentY;
+                    highestY = topY;
                 }
             }
         }
 
-        return maxY;
+        return highestY;
     }
     private void AlignTargetToHighestY(GameObject target, float newY)
     {

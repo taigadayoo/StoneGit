@@ -36,11 +36,6 @@ public class RankingManager : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-     
-    }
-
     public void TextSave()
     {
         rankingTexts[0] = GameObject.Find("First").GetComponent<Text>();
