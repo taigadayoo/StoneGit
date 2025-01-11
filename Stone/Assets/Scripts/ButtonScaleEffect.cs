@@ -10,7 +10,13 @@ public class ButtonScaleEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         originalScale = transform.localScale; // ボタンの元のスケールを保存
     }
-
+    private void Update()
+    {
+        if (!IsMouseOverObject())
+        {
+            transform.localScale = originalScale; // マウスがオブジェクトに触れていない場合は元に戻す
+        }
+    }
     // マウスが重なったとき
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -22,5 +28,10 @@ public class ButtonScaleEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public void OnPointerExit(PointerEventData eventData)
     {
         transform.localScale = originalScale; // 元に戻す
+    }
+    private bool IsMouseOverObject()
+    {
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        return rectTransform.rect.Contains(rectTransform.InverseTransformPoint(Input.mousePosition));
     }
 }

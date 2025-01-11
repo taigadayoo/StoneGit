@@ -15,11 +15,10 @@ public class RankingManager : MonoBehaviour
     public List<float> rankingScores = new List<float>(); // スコアのリスト
     public List<float> challengeRankingScores = new List<float>();
     [SerializeField]
-  public  ButtonManager buttonManager;
-    
+    public ButtonManager buttonManager;
+
     void Awake()
     {
-        // シングルトン管理
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -28,10 +27,8 @@ public class RankingManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // rankingTexts がインスペクターで設定されていない場合は自動的に再設定
         if (rankingTexts == null || rankingTexts.Length == 0)
         {
-            // シーン内の Text コンポーネントを自動的に取得
             rankingTexts = FindObjectsOfType<Text>();
         }
     }
@@ -42,69 +39,79 @@ public class RankingManager : MonoBehaviour
         rankingTexts[1] = GameObject.Find("Second").GetComponent<Text>();
         rankingTexts[2] = GameObject.Find("Thard").GetComponent<Text>();
     }
+
     public void TextSaveChallenge()
     {
         challengeRankingTexts[0] = GameObject.Find("First_C").GetComponent<Text>();
         challengeRankingTexts[1] = GameObject.Find("Second_C").GetComponent<Text>();
         challengeRankingTexts[2] = GameObject.Find("Thard_C").GetComponent<Text>();
     }
+
     public void TextSaveRankingScene()
     {
         rankingSceneText[0] = buttonManager.rankTextObjects[0];
         rankingSceneText[1] = buttonManager.rankTextObjects[1];
         rankingSceneText[2] = buttonManager.rankTextObjects[2];
     }
+
     public void TextSaveRankingChallengeScene()
     {
         rankingSceneChallengeText[0] = buttonManager.rankTextObjects[3];
         rankingSceneChallengeText[1] = buttonManager.rankTextObjects[4];
         rankingSceneChallengeText[2] = buttonManager.rankTextObjects[5];
     }
-    // ランキングの表示を更新するメソッド
+
     public void UpdateRanking(float score)
     {
         if (score == 0) return; // スコアが0の場合は処理をスキップ
 
-        // ランキングリストを更新
         rankingScores.Add(score);
         rankingScores.Sort((a, b) => b.CompareTo(a)); // 降順にソート
 
-        // 上位3位までのスコアを表示
+        // 上位3位までのスコアを保持
         if (rankingScores.Count > 3)
         {
-            rankingScores.RemoveAt(3); // 上位3位だけを残す
+            rankingScores.RemoveAt(3);
         }
 
-        // ランキングテキストを更新
+        // スコアが更新された位置を取得して点滅させる
+        int updatedIndex = rankingScores.IndexOf(score);
         UpdateRankingDisplay();
+        if (updatedIndex >= 0 && updatedIndex < rankingTexts.Length)
+        {
+            StartCoroutine(BlinkText(rankingTexts[updatedIndex]));
+        }
     }
     public void UpdateRankingChallenge(float score)
     {
-        if (score == 0) return; // スコアが0の場合は処理をスキップ
+        if (score == 0) return;
 
-        // ランキングリストを更新
         challengeRankingScores.Add(score);
-        challengeRankingScores.Sort((a, b) => b.CompareTo(a)); // 降順にソート
+        challengeRankingScores.Sort((a, b) => b.CompareTo(a));
 
-        // 上位3位までのスコアを表示
         if (challengeRankingScores.Count > 3)
         {
-            challengeRankingScores.RemoveAt(3); // 上位3位だけを残す
+            challengeRankingScores.RemoveAt(3);
         }
-
-        // ランキングテキストを更新
+        // スコアが更新された位置を取得して点滅させる
+        int updatedIndex = challengeRankingScores.IndexOf(score);
         UpdateChallengeRankingDisplay();
+        if (updatedIndex >= 0 && updatedIndex < challengeRankingTexts.Length)
+        {
+            StartCoroutine(BlinkText(challengeRankingTexts[updatedIndex]));
+        }
     }
-    // ランキングテキストを更新するメソッド
+
     public void UpdateRankingDisplay()
     {
-        for (int i = 0; i < rankingTexts.Length; i++) // 3つのランキング枠を固定で表示
+        for (int i = 0; i < rankingTexts.Length; i++)
         {
-            if (i < rankingScores.Count) // スコアが存在する場合
+            if (i < rankingScores.Count)
             {
                 rankingTexts[i].text = (i + 1) + "位:" + rankingScores[i].ToString() + "cm";
+              
             }
-            else // スコアが存在しない場合
+            else
             {
                 rankingTexts[i].text = (i + 1) + "位:---";
             }
@@ -113,46 +120,68 @@ public class RankingManager : MonoBehaviour
 
     public void UpdateChallengeRankingDisplay()
     {
-        for (int i = 0; i < challengeRankingTexts.Length; i++) // 3つのランキング枠を固定で表示
+        for (int i = 0; i < challengeRankingTexts.Length; i++)
         {
-            if (i < challengeRankingScores.Count) // スコアが存在する場合
+            if (i < challengeRankingScores.Count)
             {
                 challengeRankingTexts[i].text = (i + 1) + "位:" + challengeRankingScores[i].ToString() + "cm";
+              
             }
-            else // スコアが存在しない場合
+            else
             {
                 challengeRankingTexts[i].text = (i + 1) + "位:---";
             }
         }
     }
+
     public void ReloadRanking()
     {
-        
-        for (int i = 0; i < rankingSceneText.Length; i++) // 3つのランキング枠を固定で表示
+        for (int i = 0; i < rankingSceneText.Length; i++)
         {
-            if (i < rankingScores.Count) // スコアが存在する場合
+            if (i < rankingScores.Count)
             {
                 rankingSceneText[i].text = (i + 1) + "位:" + rankingScores[i].ToString() + "cm";
             }
-            else // スコアが存在しない場合
+            else
             {
                 rankingSceneText[i].text = (i + 1) + "位:---";
             }
         }
     }
+
     public void ReloadChallengeRanking()
     {
-
-        for (int i = 0; i < rankingSceneChallengeText.Length; i++) // 3つのランキング枠を固定で表示
+        for (int i = 0; i < rankingSceneChallengeText.Length; i++)
         {
-            if (i < challengeRankingScores.Count) // スコアが存在する場合
+            if (i < challengeRankingScores.Count)
             {
                 rankingSceneChallengeText[i].text = (i + 1) + "位:" + challengeRankingScores[i].ToString() + "cm";
             }
-            else // スコアが存在しない場合
+            else
             {
                 rankingSceneChallengeText[i].text = (i + 1) + "位:---";
             }
         }
+    }
+
+    // 点滅処理のコルーチン
+    private IEnumerator BlinkText(Text text)
+    {
+        Color originalColor = text.color;
+        Color blinkColor = Color.yellow; // 点滅色
+        float blinkInterval = 0.1f; // 点滅間隔
+
+        while (text != null) // オブジェクトが破棄されていないか確認
+        {
+            text.color = text.color == originalColor ? blinkColor : originalColor;
+            yield return new WaitForSeconds(blinkInterval);
+        }
+
+        // オブジェクトが破棄されていた場合、元の色に戻す（必要であれば）
+        if (text != null)
+        {
+            text.color = originalColor;
+        }
+
     }
 }

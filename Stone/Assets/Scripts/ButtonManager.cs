@@ -5,13 +5,19 @@ using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour
 {
+    public GameObject backButton;
+    public GameObject matchButton;
     public GameObject rankPanel;
     public GameObject nomalUI;
     public bool isRank = false;
     public Text[] rankTextObjects;
+    public GameObject onlenePanel;
+    public GameObject rankingButton;
     // Start is called before the first frame update
     void Start()
     {
+        backButton.SetActive(true);
+        matchButton.SetActive(true);
         RankingManager.Instance.buttonManager = this.gameObject.GetComponent<ButtonManager>();
         RankingManager.Instance.TextSaveRankingScene();
         RankingManager.Instance.TextSaveRankingChallengeScene();
@@ -45,9 +51,16 @@ public class ButtonManager : MonoBehaviour
     }
     public void OnBattle()
     {
-        SoundManager.Instance.StopBgm();
+        rankingButton.SetActive(false);
         SoundManager.Instance.PlaySe(SeType.SE2);
-        SceneManagement.Instance.OnBattle();
+        onlenePanel.SetActive(true);
+        nomalUI.SetActive(false);
+    }
+    public void OnBack()
+    {
+        rankingButton.SetActive(true);
+        onlenePanel.SetActive(false);
+        nomalUI.SetActive(true);
     }
     public void OnRanking()
     {

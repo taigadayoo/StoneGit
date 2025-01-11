@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,44 +31,47 @@ public class GameManager : MonoBehaviour
     GameObject[] turnUI;
     private Vector3 savedPosition;
     public RectTransform turnPanelPosition; // “®‚©‚µ‚½‚¢RectTransform
+   
     public enum GameMode
     {
         nomal,
         challenge,
         buttle
     }
+
     [SerializeField]
-   public GameMode gameMode;
+    public GameMode gameMode;
     private void Start()
     {
-       
+
         if (gameMode == GameMode.nomal)
         {
             SoundManager.Instance.PlayBgm(BgmType.BGM3);
             RankingManager.Instance.TextSave();
             RankingManager.Instance.UpdateRankingDisplay();
-        }else if (gameMode == GameMode.challenge)
+        }
+        else if (gameMode == GameMode.challenge)
         {
             SoundManager.Instance.PlayBgm(BgmType.BGM3);
             RankingManager.Instance.TextSaveChallenge();
             RankingManager.Instance.UpdateChallengeRankingDisplay();
         }
-        else if(gameMode == GameMode.buttle)
+        else if (gameMode == GameMode.buttle)
         {
             SoundManager.Instance.PlayBgm(BgmType.BGM2);
             BattleStart();
             savedPosition = turnPanelPosition.anchoredPosition;
         }
-            timer = FindObjectOfType<Timer>();
+        timer = FindObjectOfType<Timer>();
         // Å‰‚Écamera1‚ð—LŒø‰»Acamera2‚ð–³Œø‰»
         camera1.gameObject.SetActive(true);
         camera2.gameObject.SetActive(false);
-      
+
     }
 
     private void Update()
     {
- 
+
 
         if (stoneSpawner.highestY >= 0.5f)
         {
@@ -90,7 +95,7 @@ public class GameManager : MonoBehaviour
 
             OnSide = isCamera1Active;
         }
-        if(IsGameOver && Input.GetKeyDown(KeyCode.Space))
+        if (IsGameOver && Input.GetKeyDown(KeyCode.Space))
         {
             if (gameMode == GameMode.nomal)
             {
@@ -138,7 +143,7 @@ public class GameManager : MonoBehaviour
         timer.timerText.gameObject.SetActive(false);
         stoneSpawner.highText.gameObject.SetActive(false);
     }
-  public  void SetAllRigidbodiesKinematic(bool isKinematic)
+    public void SetAllRigidbodiesKinematic(bool isKinematic)
     {
         foreach (Rigidbody rb in rigidbodyList)
         {
@@ -151,12 +156,12 @@ public class GameManager : MonoBehaviour
     }
     public IEnumerator TurnPanelAnim()
     {
-      
+
         turnStart = false;
         yield return new WaitForSeconds(0.5f);
         SoundManager.Instance.PlaySe(SeType.SE5);
-        turnPanelPosition.DOAnchorPos(targetPosition,1f).SetEase(Ease.OutCubic);
-        if(!On1pTurn)
+        turnPanelPosition.DOAnchorPos(targetPosition, 1f).SetEase(Ease.OutCubic);
+        if (!On1pTurn)
         {
             turnUI[1].SetActive(true);
             turnUI[2].SetActive(false);

@@ -30,7 +30,7 @@ public class StoneSpawner : MonoBehaviour
         highText.text = $"{highestY + 96}ｃｍ";
         // 初回のランダムスポーン
         SpawnRandomObject();
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     void Update()
