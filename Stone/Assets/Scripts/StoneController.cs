@@ -23,6 +23,14 @@ public class StoneController : MonoBehaviourPunCallbacks
     private bool isMyTurn = false; // 自分のターンかどうか
     private bool isKinematicSet = false;
 
+    public enum ID
+    {
+        zero,
+        one,
+    }
+
+    [SerializeField]
+    public ID iD;
     public enum StoneLevel
     {
         Nomal,
@@ -45,7 +53,10 @@ public class StoneController : MonoBehaviourPunCallbacks
         
         
         timer = FindFirstObjectByType<Timer>();
-       
+        if (photonView.IsMine)
+        {
+            isMyTurn = true; // 自分の石であれば最初のターンを持つ
+        }
     }
 
     // Update is called once per frame
@@ -90,7 +101,11 @@ public class StoneController : MonoBehaviourPunCallbacks
                 }
                 RotateWithMouse();
             }
-            if (!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && isMyTurn)
+            if (!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && (int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 0 && iD == ID.zero)
+            {
+                HandleInput(); // 入力処理を自分のターンのときのみ実行
+            }
+             if(!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && (int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1 && iD == ID.one)
             {
                 HandleInput(); // 入力処理を自分のターンのときのみ実行
             }
@@ -173,8 +188,11 @@ public class StoneController : MonoBehaviourPunCallbacks
 
     private void EndTurn()
     {
-        isMyTurn = false;
-        PhotonNetwork.RaiseEvent(0, null, RaiseEventOptions.Default, SendOptions.SendReliable); // 次のプレイヤーに通知
+        isMyTurn = !isMyTurn;
+
+        // 次の石のターンを通知
+        object[] data = new object[] { photonView.ViewID }; // この石のIDを送信
+        PhotonNetwork.RaiseEvent(0, data, RaiseEventOptions.Default, SendOptions.SendReliable);
     }
 
     public override void OnEnable()
@@ -191,7 +209,14 @@ public class StoneController : MonoBehaviourPunCallbacks
     {
         if (photonEvent.Code == 0)
         {
-            isMyTurn = !isMyTurn; // 自分のターンを切り替える
+            object[] data = (object[])photonEvent.CustomData;
+            int viewID = (int)data[0];
+
+            // 自分の石のターンか確認
+            if (photonView.ViewID == viewID)
+            {
+                isMyTurn = true;
+            }
         }
     }
 }

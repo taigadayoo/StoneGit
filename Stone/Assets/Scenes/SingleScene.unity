@@ -2111,12 +2111,14 @@ MonoBehaviour:
   - {fileID: 3469716150032403668, guid: b279ff267d0a1d040abb4e51367ad759, type: 3}
   deadCol: {fileID: 928854392}
   spawnPosition: {fileID: 2106148075}
+  gameManager: {fileID: 918443479}
   highestY: 0
   OnStone: 0
   highText: {fileID: 2085760669}
   NowScore: {fileID: 870595253}
   demonEvent: {fileID: 963194229}
   highTextNum: 0
+  isOnline: 0
 --- !u!1 &82290936626075321
 GameObject:
   m_ObjectHideFlags: 0

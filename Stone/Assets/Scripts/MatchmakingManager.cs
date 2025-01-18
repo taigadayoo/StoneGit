@@ -2,7 +2,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using TMPro;
-using ExitGames.Client.Photon; // これを追加using ExitGames.Client.Photon; // これを追加
+using ExitGames.Client.Photon; 
 
 public class MatchmakingManager : MonoBehaviourPunCallbacks
 {
@@ -12,6 +12,8 @@ public class MatchmakingManager : MonoBehaviourPunCallbacks
     private bool isConnectedToMaster = false;
     private bool isJoinedLobby = false;
     private bool isGameStarting = false; // シーン遷移が開始されているかどうか
+
+    private int playerID = -1; // プレイヤーのグローバルID
     private const string IsGameStartingKey = "IsGameStarting";
     private void Start()
     {
@@ -32,15 +34,9 @@ public class MatchmakingManager : MonoBehaviourPunCallbacks
             {
                 StartMatching(password);
             }
-            else
-            {
-                Debug.LogWarning("Photon is not ready for matchmaking yet.");
-            }
+
         }
-        else
-        {
-            Debug.LogWarning("Password cannot be empty.");
-        }
+
     }
 
     public void StartMatching(string password)
@@ -79,22 +75,35 @@ public class MatchmakingManager : MonoBehaviourPunCallbacks
     {
         Debug.Log($"Joined room: {PhotonNetwork.CurrentRoom.Name}");
         CheckPlayerCount();
-
+        AssignGlobalID();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log($"{newPlayer.NickName} joined the room.");
         CheckPlayerCount();
-    }
 
+        //AssignGlobalID();
+    }
+    private void AssignGlobalID()
+    {
+        // ルームに参加したプレイヤーの数に基づいてIDを設定
+        playerID = PhotonNetwork.CurrentRoom.PlayerCount - 1; // 0から始める
+
+        // プレイヤーのグローバルIDをルームのカスタムプロパティに保存
+        Hashtable playerProperties = new Hashtable();
+        playerProperties.Add("GlobalID", playerID);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperties);
+
+        Debug.Log($"Assigned GlobalID: {playerID}");
+    }
     private void CheckPlayerCount()
     {
         // ルームプロパティから遷移フラグを確認
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(IsGameStartingKey) &&
             (bool)PhotonNetwork.CurrentRoom.CustomProperties[IsGameStartingKey])
         {
-            Debug.Log("[CheckPlayerCount] Scene transition already started.");
+            Debug.Log("二人いません");
             return;
         }
 
@@ -103,7 +112,7 @@ public class MatchmakingManager : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                Debug.Log("[CheckPlayerCount] Starting scene transition as MasterClient.");
+                Debug.Log("[CheckPlayerCount] シーン変わる");
 
                 // フラグをルームプロパティに設定
                 Hashtable roomProperties = new Hashtable
@@ -115,14 +124,7 @@ public class MatchmakingManager : MonoBehaviourPunCallbacks
                 // シーン遷移
                 PhotonNetwork.LoadLevel(battleSceneName);
             }
-            else
-            {
-                Debug.Log("[CheckPlayerCount] Waiting for MasterClient to start the scene transition.");
-            }
-        }
-        else
-        {
-            Debug.Log($"[CheckPlayerCount] Player count: {PhotonNetwork.CurrentRoom.PlayerCount}, IsGameStarting: false");
+
         }
     }
 }

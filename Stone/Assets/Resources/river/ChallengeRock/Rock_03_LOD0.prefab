@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2707647788675221327}
   - component: {fileID: 4456947954748217046}
   - component: {fileID: 3998151200853659978}
+  - component: {fileID: -7845596903376667866}
   m_Layer: 0
   m_Name: Rock_03_LOD0
   m_TagString: Untagged
@@ -155,3 +156,25 @@ MonoBehaviour:
   angularVelocityThreshold: 0.05
   checkDelay: 0.3
   stoneLevel: 0
+--- !u!114 &-7845596903376667866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3746716061421298782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

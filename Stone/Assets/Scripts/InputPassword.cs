@@ -28,7 +28,7 @@ public class InputPassword : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Password cannot be empty.");
+            Debug.LogWarning("パスワードが空です");
         }
     }
 }

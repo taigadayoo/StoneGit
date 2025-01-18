@@ -2146,12 +2146,58 @@ MonoBehaviour:
   - {fileID: 3469716150032403668, guid: b279ff267d0a1d040abb4e51367ad759, type: 3}
   deadCol: {fileID: 928854392}
   spawnPosition: {fileID: 2106148075}
+  gameManager: {fileID: 918443479}
   highestY: 0
   OnStone: 0
   highText: {fileID: 2085760669}
   NowScore: {fileID: 870595253}
   demonEvent: {fileID: 963194229}
   highTextNum: 0
+  isOnline: 1
+--- !u!1 &2113645858
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2113645860}
+  - component: {fileID: 2113645859}
+  m_Layer: 0
+  m_Name: TurnManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2113645859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113645858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b85eedf25a974e641ab1e57beb6af584, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2113645860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113645858}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.19332498, y: 0.11950869, z: 10.438106}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2126317315
 GameObject:
   m_ObjectHideFlags: 0
@@ -4935,3 +4981,4 @@ SceneRoots:
   - {fileID: 918443480}
   - {fileID: 678366697}
   - {fileID: 928854394}
+  - {fileID: 2113645860}

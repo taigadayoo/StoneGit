@@ -154,6 +154,7 @@ namespace Photon.Pun.UtilityScripts
         /// </summary>
         public void BeginTurn()
         {
+
             Turn = this.Turn + 1; // note: this will set a property in the room, which is available to the other players.
         }
 
@@ -272,7 +273,7 @@ namespace Photon.Pun.UtilityScripts
             {
                 _isOverCallProcessed = false;
                 this.finishedPlayers.Clear();
-                this.TurnManagerListener.OnTurnBegins(this.Turn);
+             
             }
         }
 
