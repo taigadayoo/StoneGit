@@ -55,7 +55,20 @@ public class StoneSpawner : MonoBehaviour
             float highestYMathf = Mathf.Round(highestY * 1000f) / 1000f;
             if (OnStone)
             {
-                AlignTargetToHighestY(this.gameObject, highestYMathf + 0.15f);
+                if (gameManager.gameMode != GameManager.GameMode.buttle)
+                {
+                    if (!gameManager.disconnectionPanel.activeSelf)
+                    {
+                        AlignTargetToHighestY(this.gameObject, highestYMathf + 0.15f);
+                    }
+                }
+                else if(gameManager.gameMode == GameManager.GameMode.buttle)
+                {
+                    if (!gameManager.disconnectionPanel.activeSelf)
+                    {
+                        AlignTargetToHighestY(this.gameObject, highestYMathf + 0.15f);
+                    }
+                }
                 if (gameManager.gameMode == GameManager.GameMode.nomal || gameManager.gameMode == GameManager.GameMode.buttle)
                 {
                     DeadColPos = new Vector3(deadCol.transform.position.x, highestY - 0.25f, deadCol.transform.position.z);
@@ -170,7 +183,24 @@ public class StoneSpawner : MonoBehaviour
     private float GetHighestYValue(List<GameObject> objList)
     {
         highestY = float.MinValue;
-        if (!gameManager.disconnectionPanel.activeSelf)
+        if (gameManager.gameMode == GameManager.GameMode.buttle)
+        {
+            if (!gameManager.disconnectionPanel.activeSelf)
+            {
+                foreach (GameObject obj in objList)
+                {
+                    if (obj.TryGetComponent<Collider>(out Collider collider))
+                    {
+                        float topY = collider.bounds.max.y; // オブジェクトの最上部のY座標
+                        if (topY > highestY)
+                        {
+                            highestY = topY;
+                        }
+                    }
+                }
+            }
+        }
+        if ( gameManager.gameMode != GameManager.GameMode.buttle)
         {
             foreach (GameObject obj in objList)
             {

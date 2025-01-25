@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class ButtonManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class ButtonManager : MonoBehaviour
     public Text[] rankTextObjects;
     public GameObject onlenePanel;
     public GameObject rankingButton;
+    public GameObject WaitText;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,8 +60,15 @@ public class ButtonManager : MonoBehaviour
     }
     public void OnBack()
     {
+        matchButton.SetActive(true);
         rankingButton.SetActive(true);
         onlenePanel.SetActive(false);
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+            Debug.Log("Leaving the room...");
+        }
+        WaitText.SetActive(false);
         nomalUI.SetActive(true);
     }
     public void OnRanking()

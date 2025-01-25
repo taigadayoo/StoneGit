@@ -5,6 +5,7 @@ using DG.Tweening;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GameManager  : MonoBehaviourPunCallbacks
 {
@@ -35,6 +36,9 @@ public class GameManager  : MonoBehaviourPunCallbacks
     [SerializeField]
     PhotonView photonView;
 
+    public GameObject WaitText;
+    public GameObject Win1P;
+    public GameObject Win2P;
     public GameObject disconnectionPanel;
     public enum GameMode
     {
@@ -111,7 +115,7 @@ public class GameManager  : MonoBehaviourPunCallbacks
             }
             else if (gameMode == GameMode.buttle)
             {
-                SceneManagement.Instance.OnBattle();
+                NotifyReadyToRestart();
             }
         }
         if (IsGameOver && Input.GetKeyDown(KeyCode.T))
@@ -239,5 +243,42 @@ public class GameManager  : MonoBehaviourPunCallbacks
         Debug.Log("Disconnected from the server.");
         disconnectionPanel.SetActive(true);
     }
+    public void NotifyReadyToRestart()
+    {
+        WaitText.SetActive(true);
+        Win1P.SetActive(false);
+        Win2P.SetActive(false);
+        PhotonView photonView = PhotonView.Get(this);
+        photonView.RPC("RPC_NotifyReadyToRestart", RpcTarget.All);
+    }
 
+    // RPCメソッドで全員に通知
+    [PunRPC]
+    public void RPC_NotifyReadyToRestart()
+    {
+        // プレイヤーが準備完了したことを管理するフラグを設定
+        isReadyToRestart = true;
+
+        // すべてのプレイヤーが準備完了したかチェック
+        CheckAllPlayersReady();
+    }
+
+    private bool isReadyToRestart = false;
+    private List<bool> playersReady = new List<bool>();
+
+    // すべてのプレイヤーが準備完了かチェックする
+    public void CheckAllPlayersReady()
+    {
+        // プレイヤーが準備完了した状態をリストに追加
+        playersReady.Add(isReadyToRestart);
+
+        // すべてのプレイヤーが準備完了しているかを確認
+        if (playersReady.Count == PhotonNetwork.PlayerList.Length)
+        {
+            if (playersReady.All(r => r == true))
+            {
+                SceneManagement.Instance.OnBattle();
+            }
+        }
+    }
 }

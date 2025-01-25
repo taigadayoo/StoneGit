@@ -5,6 +5,7 @@ using TMPro;
 public class InputPassword : MonoBehaviour
 {
     public GameObject BackButton;
+    public GameObject WaitText;
     [SerializeField] private TMP_InputField passwordInputField;
     [SerializeField] private Button matchButton;
     [SerializeField] private MatchmakingManager matchManager;
@@ -23,7 +24,7 @@ public class InputPassword : MonoBehaviour
         if (!string.IsNullOrEmpty(password))
         {
             matchManager.StartMatching(password);
-            BackButton.SetActive(false);
+            WaitText.SetActive(true);
             matchButton.gameObject.SetActive(false);
         }
         else
