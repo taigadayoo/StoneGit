@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Linq;
 public class StoneSpawner : MonoBehaviour
 {
     // スポーンさせるゲームオブジェクトのリスト
     public List<GameObject> objectsToSpawn;
-
+    [SerializeField]
+    PhotonView photonViewMain;
     public GameObject deadCol;
     // スポーン先の位置
     public Transform spawnPosition;
@@ -72,8 +74,6 @@ public class StoneSpawner : MonoBehaviour
             }
             highText.text = $"{highTextNum }cm";
 
-           
-            // フラグが上がったときにランダムスポーン
             if (onSpawn)
             {
                 gameManager.On1pTurn = !gameManager.On1pTurn;
@@ -105,33 +105,67 @@ public class StoneSpawner : MonoBehaviour
             {
                 // 新しい位置にオブジェクトをスポーン
                 Instantiate(randomObject, spawnPosition.position, randomObject.transform.rotation);
-            }else if(isOnline == IsOnline.Online && PhotonNetwork.IsMasterClient)
+            }
+            else if (isOnline == IsOnline.Online && PhotonNetwork.IsMasterClient)
             {
-                StoneController stoneController = randomObject.GetComponent<StoneController>();
-               if (!IsSecond)
+                // プレハブをスポーンし、PhotonViewを取得
+                GameObject spawnedObject = PhotonNetwork.Instantiate(spawnPath, spawnPosition.position, randomObject.transform.rotation, 0);
+
+                // スポーンしたオブジェクトの StoneController を取得
+                StoneController stoneController = spawnedObject.GetComponent<StoneController>();
+               
+                // IsSecond の状態に応じて ID を設定
+                if (!IsSecond)
                 {
-                    stoneController.iD = StoneController.ID.zero;
-                    IsSecond = true;
+                    stoneController.iD = StoneController.ID.zero; // iD を zero に設定
+                    // ID の値を全クライアントに同期（RPC を使用）
+                    PhotonView view = spawnedObject.GetComponent<PhotonView>();
+                    Player targetPlayer = PhotonNetwork.PlayerList.FirstOrDefault(p => (int)p.CustomProperties["GlobalID"] == 0);
+                    if (targetPlayer != null)
+                    {
+                        view.TransferOwnership(targetPlayer); // 対象のプレイヤーに所有権を設定
+                    }
+                    IsSecond = true; // 次回は one を設定
                 }
-               else if(IsSecond)
+                else
                 {
-                    stoneController.iD = StoneController.ID.one;
-                    IsSecond = false;
+                    stoneController.iD = StoneController.ID.one; // iD を one に設定
+                    // ID の値を全クライアントに同期（RPC を使用）
+                    PhotonView view = spawnedObject.GetComponent<PhotonView>();
+                    Player targetPlayer = PhotonNetwork.PlayerList.FirstOrDefault(p => (int)p.CustomProperties["GlobalID"] == 1);
+                    if (targetPlayer != null)
+                    {
+                        view.TransferOwnership(targetPlayer); // 対象のプレイヤーに所有権を設定
+                    }
+
+                    IsSecond = false; // 次回は zero を設定
                 }
-                PhotonNetwork.Instantiate(spawnPath, spawnPosition.position, randomObject.transform.rotation, 0);
+
+
+                spawnedObject.GetComponent<PhotonView>().RPC("SetID", RpcTarget.AllBuffered, (int)stoneController.iD);
             }
         }
     }
-    public void StartRespawn(bool value)
+    public void CallStartRespawn()
     {
-        StartCoroutine(SpawnStone(value));
+      
+        if (photonViewMain.IsMine) // 自分が操作している場合に呼び出す
+        {
+            photonViewMain.RPC("StartRespawn", RpcTarget.All);
+        }
+    }
+    [PunRPC]
+    public void StartRespawn()
+    {
+        Debug.Log("スポーンしました");
+        StartCoroutine(SpawnStone());
     }
     // フラグを外部から変更するメソッド
-    public IEnumerator SpawnStone(bool value)
+    public IEnumerator SpawnStone()
     {
         yield return new WaitForSeconds(1f);
 
-        onSpawn = value;
+        onSpawn = true;
     }
     private float GetHighestYValue(List<GameObject> objList)
     {

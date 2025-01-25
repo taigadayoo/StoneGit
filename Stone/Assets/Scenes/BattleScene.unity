@@ -2088,6 +2088,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2106148075}
   - component: {fileID: 2106148076}
+  - component: {fileID: 2106148077}
   m_Layer: 0
   m_Name: StoneSpawner
   m_TagString: Untagged
@@ -2144,6 +2145,7 @@ MonoBehaviour:
   - {fileID: 1791604082337378724, guid: 02914076dc3bb2a46ad69c0af5e075f7, type: 3}
   - {fileID: 4274541098458541441, guid: 56b73729e96f6aa4797304d511688b5b, type: 3}
   - {fileID: 3469716150032403668, guid: b279ff267d0a1d040abb4e51367ad759, type: 3}
+  photonViewMain: {fileID: 2106148077}
   deadCol: {fileID: 928854392}
   spawnPosition: {fileID: 2106148075}
   gameManager: {fileID: 918443479}
@@ -2154,6 +2156,28 @@ MonoBehaviour:
   demonEvent: {fileID: 963194229}
   highTextNum: 0
   isOnline: 1
+--- !u!114 &2106148077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2106148074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 2
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2113645858
 GameObject:
   m_ObjectHideFlags: 0

@@ -157,6 +157,7 @@ MonoBehaviour:
   velocityThreshold: 3
   angularVelocityThreshold: 3
   checkDelay: 0.1
+  iD: 0
   stoneLevel: 1
 --- !u!114 &-8520363730435698609
 MonoBehaviour:
@@ -190,7 +191,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: -8520363730435698609}

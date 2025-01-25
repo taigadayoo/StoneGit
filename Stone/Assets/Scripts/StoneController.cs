@@ -23,14 +23,16 @@ public class StoneController : MonoBehaviourPunCallbacks
     private bool isMyTurn = false; // 自分のターンかどうか
     private bool isKinematicSet = false;
 
-    public enum ID
-    {
-        zero,
-        one,
-    }
+    public enum ID { zero, one } // ID の列挙型
+    public ID iD = ID.zero;      // 初期値
 
-    [SerializeField]
-    public ID iD;
+    // RPCでIDを設定
+    [PunRPC]
+    public void SetID(int idValue)
+    {
+        iD = (ID)idValue; // IDを設定
+        Debug.Log($"iD is set to: {iD}");
+    }
     public enum StoneLevel
     {
         Nomal,
@@ -95,21 +97,37 @@ public class StoneController : MonoBehaviourPunCallbacks
 
                     rb.isKinematic = false;
 
-                    stoneSpawner.StartRespawn(true);
-                    this.enabled = false;
+                    stoneSpawner.StartRespawn();
+                    if (gameManager.gameMode != GameManager.GameMode.buttle)
+                    {
+                        this.enabled = false;
+                    }
                     timer.StartTimer();
                 }
                 RotateWithMouse();
             }
-            if (!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && (int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 0 && iD == ID.zero)
+            if (!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && (int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 0 && iD == ID.zero && photonView.IsMine)
             {
                 HandleInput(); // 入力処理を自分のターンのときのみ実行
+                RotateWithMouse();
             }
-             if(!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && (int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1 && iD == ID.one)
+             if(!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && (int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1 && iD == ID.one && photonView.IsMine)
             {
                 HandleInput(); // 入力処理を自分のターンのときのみ実行
+                RotateWithMouse();
             }
         }
+    }
+    [PunRPC]
+    public void DisableScript()
+    {
+        this.enabled = false; // スクリプトを無効化
+    }
+
+    // スクリプトを無効化する処理を呼び出す
+    public void TriggerDisable()
+    {
+            photonView.RPC("DisableScript", RpcTarget.All); // 全プレイヤーで無効化
     }
     private System.Collections.IEnumerator CheckMovement()
     {
@@ -178,10 +196,11 @@ public class StoneController : MonoBehaviourPunCallbacks
         {
             col1.enabled = true;
             rb.isKinematic = false;
-            stoneSpawner.StartRespawn(true);
+            stoneSpawner.CallStartRespawn();
             this.enabled = false;
             timer.StartTimer();
 
+                TriggerDisable();
             EndTurn(); // ターン終了
         }
     }
