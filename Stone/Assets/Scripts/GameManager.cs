@@ -4,8 +4,9 @@ using UnityEngine;
 using DG.Tweening;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager  : MonoBehaviourPunCallbacks
 {
     public Camera camera1; // 最初のカメラ
     public Camera camera2; // 2つ目のカメラ
@@ -31,7 +32,10 @@ public class GameManager : MonoBehaviour
     GameObject[] turnUI;
     private Vector3 savedPosition;
     public RectTransform turnPanelPosition; // 動かしたいRectTransform
-   
+    [SerializeField]
+    PhotonView photonView;
+
+    public GameObject disconnectionPanel;
     public enum GameMode
     {
         nomal,
@@ -112,10 +116,42 @@ public class GameManager : MonoBehaviour
         }
         if (IsGameOver && Input.GetKeyDown(KeyCode.T))
         {
+            if (gameMode == GameMode.buttle)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
             SceneManagement.Instance.OnTitle();
+         
         }
     }
+    public void OnTitle()
+    {
+        if (gameMode == GameMode.buttle)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+        SceneManagement.Instance.OnTitle();
+    }
     public void AddRigidbody()
+    {
+        foreach (GameObject obj in SpawnedStones)
+        {
+            // Rigidbodyコンポーネントを取得
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+
+            // Rigidbodyが存在する場合、リストに追加
+            if (rb != null)
+            {
+                rigidbodyList.Add(rb);
+            }
+        }
+    }
+    public void CallAddRigidbodyOnline()
+    {
+        photonView.RPC("AddRigidbodyOnline", RpcTarget.AllBuffered); // 全プレイヤーで無効化
+    }
+    [PunRPC]
+    public void AddRigidbodyOnline()
     {
         foreach (GameObject obj in SpawnedStones)
         {
@@ -189,4 +225,19 @@ public class GameManager : MonoBehaviour
         turnPanelPosition.anchoredPosition = savedPosition;
         turnStart = true;
     }
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        // 他のプレイヤーが退出した際にパネルを表示
+        Debug.Log($"{otherPlayer.NickName} has left the room.");
+        disconnectionPanel.SetActive(true);
+    }
+
+    // 自分がサーバーから切断されたときに呼ばれる
+    public override void OnDisconnected(Photon.Realtime.DisconnectCause cause)
+    {
+        // 自分が切断されたときにパネルを表示
+        Debug.Log("Disconnected from the server.");
+        disconnectionPanel.SetActive(true);
+    }
+
 }

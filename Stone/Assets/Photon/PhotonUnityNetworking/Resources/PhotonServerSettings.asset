@@ -47,6 +47,10 @@ MonoBehaviour:
   - DisableScript
   - StartRespawn
   - SetID
+  - SetColliderState
+  - StoneListAssign
+  - AddRigidbodyOnline
+  - ResetTimer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

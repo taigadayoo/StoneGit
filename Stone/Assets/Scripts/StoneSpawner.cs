@@ -149,7 +149,7 @@ public class StoneSpawner : MonoBehaviour
     public void CallStartRespawn()
     {
       
-        if (photonViewMain.IsMine) // 自分が操作している場合に呼び出す
+        //if (photonViewMain.IsMine) // 自分が操作している場合に呼び出す
         {
             photonViewMain.RPC("StartRespawn", RpcTarget.All);
         }
@@ -170,19 +170,20 @@ public class StoneSpawner : MonoBehaviour
     private float GetHighestYValue(List<GameObject> objList)
     {
         highestY = float.MinValue;
-
-        foreach (GameObject obj in objList)
+        if (!gameManager.disconnectionPanel.activeSelf)
         {
-            if (obj.TryGetComponent<Collider>(out Collider collider))
+            foreach (GameObject obj in objList)
             {
-                float topY = collider.bounds.max.y; // オブジェクトの最上部のY座標
-                if (topY > highestY)
+                if (obj.TryGetComponent<Collider>(out Collider collider))
                 {
-                    highestY = topY;
+                    float topY = collider.bounds.max.y; // オブジェクトの最上部のY座標
+                    if (topY > highestY)
+                    {
+                        highestY = topY;
+                    }
                 }
             }
         }
-
         return highestY;
     }
     private void AlignTargetToHighestY(GameObject target, float newY)

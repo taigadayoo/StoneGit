@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class Timer : MonoBehaviour
 {
     public Text timerText; // 残り時間を表示するUIテキスト
     private float countdownTime = 11f; // カウントダウン時間（初期値10秒）
     private float currentTime;
-    private bool isCounting = false;
-    
+    public bool isCounting = false;
+    [SerializeField]
+    PhotonView photonView;
     GameManager gameManager;
     void Start()
     {
@@ -34,9 +36,18 @@ public class Timer : MonoBehaviour
     }
     public void StartTimer()
     {
-        StartCoroutine(ResetTimer());
+        if (gameManager.gameMode != GameManager.GameMode.buttle)
+        {
+            StartCoroutine(ResetTimer());
+        }
+        else if(gameManager.gameMode == GameManager.GameMode.buttle)
+        {
+            photonView.RPC("ResetTimer", RpcTarget.AllBuffered); // 全プレイヤーで無効化
+        }
     }
     // タイマーをリセットして開始
+
+    [PunRPC]
     public IEnumerator ResetTimer()
     {
         currentTime = countdownTime;

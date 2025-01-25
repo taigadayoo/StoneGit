@@ -106,12 +106,12 @@ public class StoneController : MonoBehaviourPunCallbacks
                 }
                 RotateWithMouse();
             }
-            if (!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && (int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 0 && iD == ID.zero && photonView.IsMine)
+            if (!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && (int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 0 && iD == ID.zero && photonView.IsMine && timer.isCounting)
             {
                 HandleInput(); // 入力処理を自分のターンのときのみ実行
                 RotateWithMouse();
             }
-             if(!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && (int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1 && iD == ID.one && photonView.IsMine)
+             if(!gameManager.IsGameOver && gameManager.gameMode == GameManager.GameMode.buttle && (int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1 && iD == ID.one && photonView.IsMine && timer.isCounting)
             {
                 HandleInput(); // 入力処理を自分のターンのときのみ実行
                 RotateWithMouse();
@@ -129,6 +129,17 @@ public class StoneController : MonoBehaviourPunCallbacks
     {
             photonView.RPC("DisableScript", RpcTarget.All); // 全プレイヤーで無効化
     }
+    [PunRPC]
+    public void StoneListAssign()
+    {
+        gameManager.SpawnedStones.Add(this.gameObject);
+        gameManager.AddRigidbody();
+        rb.isKinematic = true;
+        isKinematicSet = true;
+        stoneSpawner.OnStone = true;
+
+    }
+
     private System.Collections.IEnumerator CheckMovement()
     {
         while (!isKinematicSet)
@@ -138,13 +149,19 @@ public class StoneController : MonoBehaviourPunCallbacks
 
             if (currentVelocity < velocityThreshold && currentAngularVelocity < angularVelocityThreshold)
             {
-                gameManager.SpawnedStones.Add(this.gameObject);
-                gameManager.AddRigidbody();
-                rb.isKinematic = true;
-                isKinematicSet = true;
-                stoneSpawner.OnStone = true;
+                if (gameManager.gameMode != GameManager.GameMode.buttle)
+                {
+                    gameManager.SpawnedStones.Add(this.gameObject);
+                    gameManager.AddRigidbody();
+                    rb.isKinematic = true;
+                    isKinematicSet = true;
+                    stoneSpawner.OnStone = true;
+                }
+                else if (gameManager.gameMode == GameManager.GameMode.buttle)
+                {
+                    photonView.RPC("StoneListAssign", RpcTarget.AllBuffered); // 全プレイヤーで無効化
+                }
             }
-
             yield return new WaitForSeconds(checkDelay);
         }
     }
@@ -189,22 +206,50 @@ public class StoneController : MonoBehaviourPunCallbacks
     private void HandleInput()
     {
         float moveInput = Input.GetAxisRaw("Horizontal");
-        Vector3 moveDirection = new Vector3(moveInput * -moveSpeed * Time.deltaTime, 0f, 0f);
+        // 水平方向に移動
+        Vector3 moveDirection;
+        if (gameManager.OnSide)
+        {
+            // 手前（カメラ方向）/奥方向（カメラと逆方向）に移動
+            moveDirection = new Vector3(0f, 0f, moveInput * -moveSpeed * Time.deltaTime);
+        }
+        else
+        {
+            // 左右方向に移動
+            moveDirection = new Vector3(moveInput * -moveSpeed * Time.deltaTime, 0f, 0f);
+        }
         transform.position += moveDirection;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            col1.enabled = true;
+            EnableCollider();
             rb.isKinematic = false;
             stoneSpawner.CallStartRespawn();
-            this.enabled = false;
             timer.StartTimer();
 
-                TriggerDisable();
+            TriggerDisable();
             EndTurn(); // ターン終了
+            this.enabled = false;
+         
+        }
+    }
+    [PunRPC]
+    public void SetColliderState(bool isEnabled)
+    {
+        // コライダーの状態を設定
+        if (col1 != null)
+        {
+            col1.enabled = isEnabled;
         }
     }
 
+    // コライダーをオンにするメソッド
+    public void EnableCollider()
+    {
+            col1.enabled = true;
+            photonView.RPC("SetColliderState", RpcTarget.OthersBuffered, true); // 他のクライアントに同期
+
+    }
     private void EndTurn()
     {
         isMyTurn = !isMyTurn;
