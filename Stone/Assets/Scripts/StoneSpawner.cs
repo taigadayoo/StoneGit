@@ -57,10 +57,9 @@ public class StoneSpawner : MonoBehaviour
             {
                 if (gameManager.gameMode != GameManager.GameMode.buttle)
                 {
-                    if (!gameManager.disconnectionPanel.activeSelf)
-                    {
+
                         AlignTargetToHighestY(this.gameObject, highestYMathf + 0.15f);
-                    }
+
                 }
                 else if(gameManager.gameMode == GameManager.GameMode.buttle)
                 {

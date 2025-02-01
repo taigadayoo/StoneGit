@@ -34,12 +34,16 @@ public class GameManager  : MonoBehaviourPunCallbacks
     private Vector3 savedPosition;
     public RectTransform turnPanelPosition; // 動かしたいRectTransform
     [SerializeField]
-    PhotonView photonView;
-
+    PhotonView _photonView;
+    public float blinkInterval = 0.5f; // 点滅間隔
     public GameObject WaitText;
     public GameObject Win1P;
     public GameObject Win2P;
     public GameObject disconnectionPanel;
+    public GameObject Ups;
+    public GameObject Downs;
+    public int MyRate = 1000;
+    public Text[] PanelTexts;
     public enum GameMode
     {
         nomal,
@@ -51,7 +55,7 @@ public class GameManager  : MonoBehaviourPunCallbacks
     public GameMode gameMode;
     private void Start()
     {
-
+        MyRate = PlayerPrefs.GetInt("MyRate", 1000); // 初期値1000
         if (gameMode == GameMode.nomal)
         {
             SoundManager.Instance.PlayBgm(BgmType.BGM3);
@@ -69,6 +73,25 @@ public class GameManager  : MonoBehaviourPunCallbacks
             SoundManager.Instance.PlayBgm(BgmType.BGM2);
             BattleStart();
             savedPosition = turnPanelPosition.anchoredPosition;
+
+            if (PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] != null)
+            {
+                if ((int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1)
+                {
+                    PanelTexts[0].text = "あいての番";
+                    PanelTexts[0].color = Color.blue;
+                    PanelTexts[1].text = "あなたの番";
+                    PanelTexts[1].color = Color.red;
+                    PanelTexts[2].text = "あいての勝利!";
+                    PanelTexts[2].color = Color.blue;
+                    PanelTexts[3].text = "あなたの勝利!";
+                    PanelTexts[3].color = Color.red;
+                    PanelTexts[4].text = "あいて";
+                    PanelTexts[4].color = Color.blue;
+                    PanelTexts[5].text = "あなた";
+                    PanelTexts[5].color = Color.red;
+                }
+            }
         }
         timer = FindObjectOfType<Timer>();
         // 最初にcamera1を有効化、camera2を無効化
@@ -127,6 +150,10 @@ public class GameManager  : MonoBehaviourPunCallbacks
             SceneManagement.Instance.OnTitle();
          
         }
+        if (gameMode == GameMode.buttle)
+        {
+            PanelTexts[6].text = MyRate.ToString() + "Pt";
+        }
     }
     public void OnTitle()
     {
@@ -169,6 +196,45 @@ public class GameManager  : MonoBehaviourPunCallbacks
             }
         }
     }
+    [PunRPC]
+    public void RateManager()
+    {
+        if (!On1pTurn)
+        {
+            if ((int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1)
+            {
+                StartCoroutine(Blink(Ups));
+                MyRate += 50;
+                Debug.Log(MyRate);
+            }
+            else if ((int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 0)
+            {
+                StartCoroutine(Blink(Downs));
+                MyRate -= 50;
+                Debug.Log(MyRate);
+            }
+        }
+        else
+        {
+            if ((int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 0)
+            {
+                StartCoroutine(Blink(Ups));
+                MyRate += 50;
+                Debug.Log(MyRate);
+            }
+            else if ((int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1)
+            {
+                MyRate -= 50;
+                Debug.Log(MyRate);
+                StartCoroutine(Blink(Downs));
+            }
+        }
+        // PlayerPrefs に保存
+        PlayerPrefs.SetInt("MyRate", MyRate);
+        PlayerPrefs.Save();  // 明示的に保存
+
+        Debug.Log("MyRate: " + MyRate);
+    }
     public void GameOver()
     {
         SoundManager.Instance.StopBgm();
@@ -182,6 +248,11 @@ public class GameManager  : MonoBehaviourPunCallbacks
         targetRectTransform.DOAnchorPos(targetPosition, duration).SetEase(Ease.OutCubic);
         timer.timerText.gameObject.SetActive(false);
         stoneSpawner.highText.gameObject.SetActive(false);
+        if (gameMode == GameMode.buttle)
+        {
+            photonView.RPC("RateManager", RpcTarget.Others);
+        }
+
     }
     public void SetAllRigidbodiesKinematic(bool isKinematic)
     {
@@ -279,6 +350,14 @@ public class GameManager  : MonoBehaviourPunCallbacks
             {
                 SceneManagement.Instance.OnBattle();
             }
+        }
+    }
+    IEnumerator Blink(GameObject gameObject)
+    {
+        while (true)
+        {
+            gameObject.SetActive(!gameObject.activeSelf); // 現在のアクティブ状態を反転
+            yield return new WaitForSeconds(blinkInterval);
         }
     }
 }
