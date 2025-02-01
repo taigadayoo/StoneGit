@@ -44,6 +44,7 @@ public class GameManager  : MonoBehaviourPunCallbacks
     public GameObject Downs;
     public int MyRate = 1000;
     public Text[] PanelTexts;
+    public bool OneChange = false;
     public enum GameMode
     {
         nomal,
@@ -74,6 +75,19 @@ public class GameManager  : MonoBehaviourPunCallbacks
             BattleStart();
             savedPosition = turnPanelPosition.anchoredPosition;
 
+           
+        }
+        timer = FindObjectOfType<Timer>();
+        // 最初にcamera1を有効化、camera2を無効化
+        camera1.gameObject.SetActive(true);
+        camera2.gameObject.SetActive(false);
+
+    }
+
+    private void Update()
+    {
+        if(!OneChange && gameMode == GameMode.buttle)
+        {
             if (PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] != null)
             {
                 if ((int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1)
@@ -92,17 +106,8 @@ public class GameManager  : MonoBehaviourPunCallbacks
                     PanelTexts[5].color = Color.red;
                 }
             }
+            OneChange = true;
         }
-        timer = FindObjectOfType<Timer>();
-        // 最初にcamera1を有効化、camera2を無効化
-        camera1.gameObject.SetActive(true);
-        camera2.gameObject.SetActive(false);
-
-    }
-
-    private void Update()
-    {
-
 
         if (stoneSpawner.highestY >= 0.5f)
         {
@@ -199,18 +204,22 @@ public class GameManager  : MonoBehaviourPunCallbacks
     [PunRPC]
     public void RateManager()
     {
+        int plusRate;
+        int minusRate;
+        plusRate = Random.Range(40, 61);
+        minusRate = Random.Range(40, 61);
         if (!On1pTurn)
         {
             if ((int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1)
             {
                 StartCoroutine(Blink(Ups));
-                MyRate += 50;
+                MyRate += plusRate;
                 Debug.Log(MyRate);
             }
             else if ((int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 0)
             {
                 StartCoroutine(Blink(Downs));
-                MyRate -= 50;
+                MyRate -= minusRate;
                 Debug.Log(MyRate);
             }
         }
@@ -219,12 +228,12 @@ public class GameManager  : MonoBehaviourPunCallbacks
             if ((int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 0)
             {
                 StartCoroutine(Blink(Ups));
-                MyRate += 50;
+                MyRate += plusRate;
                 Debug.Log(MyRate);
             }
             else if ((int)PhotonNetwork.LocalPlayer.CustomProperties["GlobalID"] == 1)
             {
-                MyRate -= 50;
+                MyRate -= minusRate;
                 Debug.Log(MyRate);
                 StartCoroutine(Blink(Downs));
             }

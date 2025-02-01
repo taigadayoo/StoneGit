@@ -42,7 +42,10 @@ public class SceneManagement : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
     }
-
+    private void Start()
+    {
+        Screen.SetResolution(1920, 1080, false);
+    }
     // Update is called once per frame
     void Update()
     {
